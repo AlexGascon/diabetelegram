@@ -21,8 +21,7 @@ class MealParser:
     def parse_carbohydrates_portions(self):
         carbohydrates_portions_value = self._extract_value("raciones")
 
-        if carbohydrates_portions_value:
-            return float(carbohydrates_portions_value)
+        return float(carbohydrates_portions_value) if carbohydrates_portions_value else None
 
     def parse_food(self):
         return self._extract_value("comida")
@@ -30,8 +29,7 @@ class MealParser:
     def parse_insulin_units(self):
         insulin_units_value = self._extract_value("insulina")
 
-        if insulin_units_value:
-            return float(insulin_units_value)
+        return float(insulin_units_value) if insulin_units_value else None
 
     def parse_meal_type(self):
         return self._extract_value("tipo")
@@ -39,14 +37,12 @@ class MealParser:
     def parse_pre_blood_glucose(self):
         pre_blood_glucose_value = self._extract_value("pre")
         
-        if pre_blood_glucose_value:
-            return int(pre_blood_glucose_value)
+        return int(pre_blood_glucose_value) if pre_blood_glucose_value else None
 
     def parse_post_blood_glucose(self):
         post_blood_glucose_value = self._extract_value("post")
 
-        if post_blood_glucose_value:
-            return int(post_blood_glucose_value)
+        return int(post_blood_glucose_value) if post_blood_glucose_value else None
 
     def _extract_value(self, field_key):
         field_info = list(filter(lambda m: m.strip().startswith(field_key), self._message_parts()))
