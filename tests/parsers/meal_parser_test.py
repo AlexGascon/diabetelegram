@@ -1,7 +1,6 @@
 import pytest
 
 from diabetelegram.parsers.meal_parser import MealParser
-from tests.fixtures.messages import meal_message, incomplete_meal_message
 
 # Fixtures
 
