@@ -2,8 +2,8 @@ import pytest
 
 from diabetelegram.parsers.meal_parser import MealParser
 
-# Fixtures
 
+# Fixtures
 @pytest.fixture
 def parser():
     return MealParser("pre: 85, post: 123, tipo: lunch, insulina: 2, raciones: 5, comida: Hamburguesa Goiko Kevin Bacon con Sweet Potatos - Solo un poco sin terminarlas todas")
