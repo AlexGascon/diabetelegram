@@ -1,0 +1,22 @@
+service: diabetelegram
+
+provider:
+  name: aws
+  runtime: python3.7
+
+functions:
+  hello:
+    handler: diabetelegram.handler.handler
+    events:
+      - http:
+          path: /updates
+          method: post
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+custom:
+  pythonRequirements:
+    usePipenv: true
+  dotenv:
+    path: .env
