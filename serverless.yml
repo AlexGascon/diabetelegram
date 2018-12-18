@@ -20,4 +20,3 @@ custom:
     usePipenv: true
   dotenv:
     path: .env
-

@@ -16,4 +16,3 @@ class CommandRouter:
 
         matching_command.handle(message)
         return True
-        
