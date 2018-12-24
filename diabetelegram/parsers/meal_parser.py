@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from diabetelegram.models.meal import Meal
 
+
 @dataclass
 class MealParser:
     message: str
