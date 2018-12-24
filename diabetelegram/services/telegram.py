@@ -2,6 +2,7 @@ import os
 
 import telebot
 
+
 class TelegramWrapper:
     """Handles interactions with the Telegram Bot API"""
     def __init__(self):
