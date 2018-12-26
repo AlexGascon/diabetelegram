@@ -1,11 +1,13 @@
-from diabetelegram.commands.new_meal_command import NewMealCommand
+from diabetelegram.commands.meal_commands import DeleteMealCommand, EditMealCommand, NewMealCommand
 from diabetelegram.commands.ping_command import PingCommand
 
 class CommandRouter:
     """Passes a message containing a command to the corresponding handler class"""
     COMMANDS = {
         '/ping': PingCommand,
-        '/newmeal': NewMealCommand
+        '/newmeal': NewMealCommand,
+        '/editmeal': EditMealCommand,
+        '/deletemeal': DeleteMealCommand
     }
 
     @classmethod
