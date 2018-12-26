@@ -15,15 +15,39 @@ class MealWebClient:
     def create_meal(self, meal):
         """Send the request to store data of a new meal"""
         url = self.API_URL
-        headers = {'api_key': self.API_TOKEN}
         body = {'meal': MealSerializer(meal).to_dict()}
 
-        response = requests.post(url, headers=headers, json=body)
+        response = requests.post(url, headers=self._build_headers(), json=body)
 
         return self._handle_response(response)
 
+    def edit_meal(self, meal_id, new_meal_data):
+        """Edits the meal with the specified id"""
+        url = f"{self.API_URL}/{meal_id}"
+        body = {'meal': MealSerializer(new_meal_data).to_dict()}
+
+        response = requests.patch(url, headers=self._build_headers(), json=body)
+
+        return self._handle_response(response)
+
+    def delete_meal(self, meal_id):
+        """Send the request to delete the meal associated with the specified id"""
+        url = f"{self.API_URL}/{meal_id}"
+
+        response = requests.delete(url, headers=self._build_headers())
+
+        return self._handle_response(response)
+
+
+    def _build_headers(self):
+        return {'api_key': self.API_TOKEN}
+
     def _handle_response(self, response):
-        if response.status_code == 201:
-            return str(response.json())
+        if response.status_code in range(200, 300):
+            response_msg = f"CODE: {response.status_code}"
+            if response.text:
+                response_msg += f"\n RESPONSE: {response.json()}"
+
+            return response_msg
         else:
             return str(response.status_code)
