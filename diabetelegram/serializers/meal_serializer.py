@@ -8,7 +8,7 @@ class MealSerializer:
     meal: Meal
 
     def to_dict(self):
-        return {
+        data = {
             "carbohydrates_portions": self.meal.carbohydrates_portions,
             "food": self.meal.food,
             "insulin_units": self.meal.insulin_units,
@@ -16,3 +16,5 @@ class MealSerializer:
             "pre_blood_glucose": self.meal.pre_blood_glucose,
             "post_blood_glucose": self.meal.post_blood_glucose
         }
+
+        return {key: value for key, value in data.items() if value is not None}
