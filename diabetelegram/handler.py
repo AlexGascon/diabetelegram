@@ -21,8 +21,7 @@ def handler(event, context):
             CommandRouter.dispatch(message)
 
     except Exception as e:
-        logger.error(f"ERROR MESSAGE: {e}")
-        logger.error(traceback.print_exception(e))
+        logger.error(f"ERROR MESSAGE: {e} \n TRACEBACK: {traceback.format_exc()}")
 
     finally:
         # Making sure to notify Telegram Webhook that we received the update
