@@ -13,6 +13,7 @@ class MealSerializer:
             "food": self.meal.food,
             "insulin_units": self.meal.insulin_units,
             "meal_type": self.meal.meal_type,
+            "notes": self.meal.notes,
             "pre_blood_glucose": self.meal.pre_blood_glucose,
             "post_blood_glucose": self.meal.post_blood_glucose
         }

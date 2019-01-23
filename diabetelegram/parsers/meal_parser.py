@@ -13,6 +13,7 @@ class MealParser:
             "food": self.parse_food(),
             "insulin_units": self.parse_insulin_units(),
             "meal_type": self.parse_meal_type(),
+            "notes": self.parse_notes(),
             "pre_blood_glucose": self.parse_pre_blood_glucose(),
             "post_blood_glucose": self.parse_post_blood_glucose()
         }
@@ -34,6 +35,9 @@ class MealParser:
 
     def parse_meal_type(self):
         return self._extract_value("tipo")
+
+    def parse_notes(self):
+        return self._extract_value("notas")
 
     def parse_pre_blood_glucose(self):
         pre_blood_glucose_value = self._extract_value("pre")
