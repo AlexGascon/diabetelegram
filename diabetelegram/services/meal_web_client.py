@@ -44,10 +44,17 @@ class MealWebClient:
 
     def _handle_response(self, response):
         if response.status_code in range(200, 300):
-            response_msg = f"CODE: {response.status_code}"
+            response_msg = f"CODE: {response.status_code}\n"
             if response.text:
-                response_msg += f"\n RESPONSE: {response.json()}"
+                response_msg += f"\nMeal:\n{self._format_response_body(response.json())}"
 
             return response_msg
         else:
             return str(response.status_code)
+
+    def _format_response_body(self, response_body):
+        message = ""
+        for key, value in response_body['data'].items():
+            message += f"{key.replace('_', ' ').capitalize()}: {value}\n"
+
+        return message
