@@ -40,7 +40,7 @@ class MealWebClient:
 
 
     def _build_headers(self):
-        return {'api_key': self.API_TOKEN}
+        return {'apikey': self.API_TOKEN}
 
     def _handle_response(self, response):
         if response.status_code in range(200, 300):
