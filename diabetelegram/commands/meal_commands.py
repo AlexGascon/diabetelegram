@@ -54,3 +54,19 @@ class DeleteMealCommand:
 
         telegram = TelegramWrapper()
         telegram.reply(message, result)
+
+
+class SearchMealCommand:
+    """Connects with the diabetes API to search meals containing specific words
+
+    It expects the message to have the following form:
+    /searchmeal <search term>
+    """
+
+    @staticmethod
+    def handle(message):
+        _, search_term = message['text'].split(maxsplit=1)
+
+        result = MealWebClient.search_meal(search_term)
+
+        TelegramWrapper().reply(message, result)
