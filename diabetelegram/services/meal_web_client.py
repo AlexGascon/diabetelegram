@@ -38,6 +38,13 @@ class MealWebClient:
 
         return self._handle_response(response)
 
+    def search_meal(self, search_term):
+        url = self.API_URL
+        params = {'q': search_term}
+
+        response = requests.get(url, params=params, headers=self._build_headers())
+
+        return self._handle_response(response)
 
     def _build_headers(self):
         return {'apikey': self.API_TOKEN}
