@@ -67,6 +67,6 @@ class SearchMealCommand:
     def handle(message):
         _, search_term = message['text'].split(maxsplit=1)
 
-        result = MealWebClient.search_meal(search_term)
+        result = MealWebClient().search_meal(search_term)
 
         TelegramWrapper().reply(message, result)
