@@ -38,6 +38,13 @@ class MealWebClient:
 
         return self._handle_response(response)
 
+    def search_meal(self, search_term):
+        url = self.API_URL
+        params = {'q': search_term}
+
+        response = requests.get(url, params=params, headers=self._build_headers())
+
+        return self._handle_response(response)
 
     def _build_headers(self):
         return {'apikey': self.API_TOKEN}
@@ -45,16 +52,28 @@ class MealWebClient:
     def _handle_response(self, response):
         if response.status_code in range(200, 300):
             response_msg = f"CODE: {response.status_code}\n"
-            if response.text:
-                response_msg += f"\nMeal:\n{self._format_response_body(response.json())}"
 
+            if response.text:
+                response_data = response.json()['data']
+
+                if type(response_data) == list:
+                    response_msg += self._format_meals(response_data)
+                else:
+                    response_msg += self._format_meal(response_data)
             return response_msg
+
         else:
             return str(response.status_code)
 
-    def _format_response_body(self, response_body):
-        message = ""
-        for key, value in response_body['data'].items():
-            message += f"{key.replace('_', ' ').capitalize()}: {value}\n"
+    def _format_meals(self, meals_data):
+        meals_info = [self._format_meal(meal_data) for meal_data in meals_data]
+        meals_separator = "\n-----------------\n"
 
-        return message
+        return meals_separator.join(meals_info)
+
+    def _format_meal(self, meal_data):
+        meal_info = "\nMeal:\n"
+        for key, value in meal_data.items():
+            meal_info += f"{key.replace('_', ' ').capitalize()}: {value}\n"
+
+        return meal_info
