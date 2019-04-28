@@ -1,3 +1,4 @@
+from diabetelegram.commands.injection_commands import NewInjectionCommand
 from diabetelegram.commands.meal_commands import DeleteMealCommand, EditMealCommand, NewMealCommand, SearchMealCommand
 from diabetelegram.commands.ping_command import PingCommand
 
@@ -8,7 +9,8 @@ class CommandRouter:
         '/newmeal': NewMealCommand,
         '/editmeal': EditMealCommand,
         '/deletemeal': DeleteMealCommand,
-        '/searchmeal': SearchMealCommand
+        '/searchmeal': SearchMealCommand,
+        '/newinjection': NewInjectionCommand,
     }
 
     @classmethod
