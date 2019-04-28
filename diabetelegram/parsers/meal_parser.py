@@ -1,12 +1,8 @@
-from dataclasses import dataclass
-
+from diabetelegram.parsers.base_parser import BaseParser
 from diabetelegram.models.meal import Meal
 
 
-@dataclass
-class MealParser:
-    message: str
-
+class MealParser(BaseParser):
     def to_meal(self):
         meal_fields = {
             "carbohydrates_portions": self.parse_carbohydrates_portions(),
@@ -48,16 +44,3 @@ class MealParser:
         post_blood_glucose_value = self._extract_value("post")
 
         return int(post_blood_glucose_value) if post_blood_glucose_value else None
-
-    def _extract_value(self, field_key):
-        field_info = list(filter(lambda m: m.strip().startswith(field_key), self._message_parts()))
-
-        if not field_info:
-            return None
-
-        field_value = field_info[0].split(":")[1].strip()
-
-        return field_value
-
-    def _message_parts(self):
-        return self.message.split(",")

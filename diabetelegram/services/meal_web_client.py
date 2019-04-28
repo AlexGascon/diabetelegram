@@ -1,29 +1,23 @@
-import json
-import logging
-import os
-
 import requests
 
+from diabetelegram.services.base_web_client import BaseWebClient
 from diabetelegram.serializers.meal_serializer import MealSerializer
 
 
-class MealWebClient:
-    """Handles interactions with the Diabetes API"""
-    API_URL = os.environ['DIABETES_API_URL']
-    API_TOKEN = os.environ['DIABETES_API_TOKEN']
+class MealWebClient(BaseWebClient):
+    """Handles interactions with the Meal resource of the diabetes API"""
 
     def create_meal(self, meal):
         """Send the request to store data of a new meal"""
-        url = self.API_URL
         body = {'meal': MealSerializer(meal).to_dict()}
 
-        response = requests.post(url, headers=self._build_headers(), json=body)
+        response = requests.post(self._base_url(), headers=self._build_headers(), json=body)
 
         return self._handle_response(response)
 
     def edit_meal(self, meal_id, new_meal_data):
         """Edits the meal with the specified id"""
-        url = f"{self.API_URL}/{meal_id}"
+        url = f"{self._base_url()}/{meal_id}"
         body = {'meal': MealSerializer(new_meal_data).to_dict()}
 
         response = requests.patch(url, headers=self._build_headers(), json=body)
@@ -32,22 +26,21 @@ class MealWebClient:
 
     def delete_meal(self, meal_id):
         """Send the request to delete the meal associated with the specified id"""
-        url = f"{self.API_URL}/{meal_id}"
+        url = f"{self._base_url()}/{meal_id}"
 
         response = requests.delete(url, headers=self._build_headers())
 
         return self._handle_response(response)
 
     def search_meal(self, search_term):
-        url = self.API_URL
         params = {'q': search_term}
 
-        response = requests.get(url, params=params, headers=self._build_headers())
+        response = requests.get(self._base_url(), params=params, headers=self._build_headers())
 
         return self._handle_response(response)
 
-    def _build_headers(self):
-        return {'apikey': self.API_TOKEN}
+    def _base_url(self):
+        return f"{self.API_URL}/meals"
 
     def _handle_response(self, response):
         if response.status_code in range(200, 300):
@@ -72,8 +65,10 @@ class MealWebClient:
         return meals_separator.join(meals_info)
 
     def _format_meal(self, meal_data):
-        meal_info = "\nMeal:\n"
-        for key, value in meal_data.items():
-            meal_info += f"{key.replace('_', ' ').capitalize()}: {value}\n"
+        info_separator = "\n"
+        info_title = "Meal:"
 
-        return meal_info
+        meal_info = [self._format_item(key, value) for key, value in meal_data.items()]
+        meal_info.insert(0, info_title)
+
+        return info_separator.join(meal_info)
