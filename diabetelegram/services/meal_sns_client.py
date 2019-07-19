@@ -5,6 +5,7 @@ import boto3
 
 from diabetelegram.serializers.meal_serializer import MealSerializer
 
+
 class MealSNSClient:
     MEAL_EATEN_TOPIC = os.environ['MEAL_EATEN_TOPIC_ARN']
 
@@ -19,7 +20,7 @@ class MealSNSClient:
             'Message': json.dumps(MealSerializer(meal).to_dict())
         }
 
-        response = sns.publish(sns_payload)
+        response = self.sns.publish(sns_payload)
 
         return response['MessageId']
 
