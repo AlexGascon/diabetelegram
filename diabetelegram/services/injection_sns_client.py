@@ -1,18 +1,25 @@
+import json
+import os
+
 import boto3
+
+from diabetelegram.serializers.injection_serializer import InjectionSerializer
 
 
 class InjectionSNSClient:
-    INJECTION_CREATED_TOPIC = 'InjectionCreated'
+    INJECTION_CREATED_TOPIC = os.environ['INJECTION_CREATED_TOPIC_ARN']
 
     def __init__(self):
-        self.sns = boto3.resource('sns')
+        self.sns = boto3.client('sns')
 
     def create_injection(self, injection):
         """Pushes an event to the CreatedInjection SNS topic"""
         
-        sns_payload = self._build_create_injection_message(injection)
+        sns_payload = {
+            'TopicArn': self.INJECTION_CREATED_TOPIC,
+            'Message': json.dumps(InjectionSerializer(injection).to_dict())
+        }
 
-        message = sns.topic(self.INJECTION_CREATED_TOPIC).publish(sns_payload)
+        response = sns.publish(sns_payload)
 
-    def _build_create_injection_message(injection):
-        pass
+        return response['MessageId']
