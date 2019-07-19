@@ -13,6 +13,7 @@ boto3 = "*"
 ipython = "*"
 ipdb = "*"
 pylint = "<2.0.0"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
