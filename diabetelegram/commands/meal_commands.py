@@ -1,4 +1,7 @@
+import os
+
 from diabetelegram.parsers.meal_parser import MealParser
+from diabetelegram.services.meal_sns_client import MealSNSClient
 from diabetelegram.services.meal_web_client import MealWebClient
 from diabetelegram.services.telegram import TelegramWrapper
 
@@ -15,7 +18,10 @@ class NewMealCommand:
         _, meal_info = message['text'].split(maxsplit=1)
         meal = MealParser(meal_info).to_meal()
 
-        result = MealWebClient().create_meal(meal)
+        if os.environ['EVENT_ORIENTED_ON'] == 'true':
+            result = MealSNSClient().meal_eaten(meal)
+        else:
+            result = MealWebClient().create_meal(meal)
 
         telegram = TelegramWrapper()
         telegram.reply(message, result)

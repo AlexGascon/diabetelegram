@@ -7,11 +7,13 @@ name = "pypi"
 pytelegrambotapi = "*"
 pytest = "*"
 requests = "*"
+boto3 = "*"
 
 [dev-packages]
 ipython = "*"
 ipdb = "*"
 pylint = "<2.0.0"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"

@@ -1,5 +1,8 @@
+import os
+
 from diabetelegram.parsers.injection_parser import InjectionParser
 from diabetelegram.services.injection_web_client import InjectionWebClient
+from diabetelegram.services.injection_sns_client import InjectionSNSClient
 from diabetelegram.services.telegram import TelegramWrapper
 
 
@@ -15,7 +18,10 @@ class NewInjectionCommand:
         _, injection_info = message['text'].split(maxsplit=1)
         injection = InjectionParser(injection_info).to_injection()
 
-        result = InjectionWebClient().create_injection(injection)
+        if os.environ['EVENT_ORIENTED_ON'] == 'true':
+            result = InjectionSNSClient.insulin_injected(injection)
+        else:
+            result = InjectionWebClient().create_injection(injection)
 
         telegram = TelegramWrapper()
         telegram.reply(message, result)
