@@ -1,6 +1,6 @@
-from diabetelegram.parsers.injection_parser import InjectionParser
 import os
 
+from diabetelegram.parsers.injection_parser import InjectionParser
 from diabetelegram.services.injection_web_client import InjectionWebClient
 from diabetelegram.services.injection_sns_client import InjectionSNSClient
 from diabetelegram.services.telegram import TelegramWrapper
