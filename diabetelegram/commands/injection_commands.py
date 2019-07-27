@@ -19,7 +19,7 @@ class NewInjectionCommand:
         injection = InjectionParser(injection_info).to_injection()
 
         if os.environ['EVENT_ORIENTED_ON'] == 'true':
-            result = InjectionSNSClient.insulin_injected(injection)
+            result = InjectionSNSClient().insulin_injected(injection)
         else:
             result = InjectionWebClient().create_injection(injection)
 

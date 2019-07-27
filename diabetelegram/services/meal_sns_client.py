@@ -20,7 +20,7 @@ class MealSNSClient:
             'Message': json.dumps(MealSerializer(meal).to_dict())
         }
 
-        response = self.sns.publish(sns_payload)
+        response = self.sns.publish(**sns_payload)
 
         return response['MessageId']
 
