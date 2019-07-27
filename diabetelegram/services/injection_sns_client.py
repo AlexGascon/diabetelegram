@@ -20,6 +20,6 @@ class InjectionSNSClient:
             'Message': json.dumps(InjectionSerializer(injection).to_dict())
         }
 
-        response = self.sns.publish(sns_payload)
+        response = self.sns.publish(**sns_payload)
 
         return response['MessageId']

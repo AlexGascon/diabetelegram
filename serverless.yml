@@ -3,6 +3,13 @@ service: diabetelegram
 provider:
   name: aws
   runtime: python3.7
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'sns:*'
+      Resource:
+        - '${env:INSULIN_INJECTED_TOPIC_ARN}'
+        - '${env:MEAL_EATEN_TOPIC_ARN}'
 
 functions:
   hello:
