@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run: python -m pip install --upgrade pip && hash -d pip
+        run: python -m pip install --upgrade pip==9.0.3
       - name: Install Pipenv
         run: pip install pipenv
       - name: Install dependencies
