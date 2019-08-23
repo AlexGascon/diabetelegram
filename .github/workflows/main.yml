@@ -7,8 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Pipenv
-        run: pip install pipenv
-      - name: Install dependencies
-        run: pipenv install
+        run: pip install pipenv && pipenv install
       - name: Run tests
         run: pytest
