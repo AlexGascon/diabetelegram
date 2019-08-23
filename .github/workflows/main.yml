@@ -15,3 +15,15 @@ jobs:
       run: pip install -r ./requirements.txt
     - name: Run tests
       run: pytest
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install Serverless framework
+      run: npm install -g serverless
+    - name: Deploy
+      run: serverless deploy
