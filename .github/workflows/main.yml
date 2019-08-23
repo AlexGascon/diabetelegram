@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Pipenv
-        run: curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
+        run: pip3 install --user pipenv
       - name: Install dependencies
         run: pipenv install
       - name: Run tests
