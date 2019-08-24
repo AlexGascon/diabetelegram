@@ -4,6 +4,7 @@ on: push
 
 jobs:
   test:
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -16,6 +17,8 @@ jobs:
     - name: Run tests
       run: pytest
   build-and-deploy:
+    name: Deploy the project
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -25,5 +28,8 @@ jobs:
         node-version: 12.x
     - name: Install Serverless framework
       run: npm install -g serverless
+    - name: Install Serverless plugins
+      run: npm install
     - name: Deploy
+      if: github.ref == 'master'
       run: serverless deploy
