@@ -1,0 +1,10 @@
+{
+  "name": "diabetelegram",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-python-requirements": "^5.0.0"
+  },
+  "author": ""
+}
