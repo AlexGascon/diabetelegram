@@ -31,5 +31,5 @@ jobs:
     - name: Install Serverless plugins
       run: npm install
     - name: Deploy
-      if: github.ref == '**/master'
+      if: github.ref == 'refs/heads/master'
       run: serverless deploy
