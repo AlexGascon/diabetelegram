@@ -2,6 +2,7 @@ service: diabetelegram
 
 provider:
   name: aws
+  stage: ${self:custom.stage}
   runtime: python3.7
   region: eu-west-1
   iamRoleStatements:
@@ -13,6 +14,7 @@ provider:
 
 functions:
   hello:
+    name: diabetelegram-${self:custom.stage}
     handler: diabetelegram.handler.handler
     events:
       - http:
@@ -25,5 +27,4 @@ plugins:
 custom:
   pythonRequirements:
     usePipenv: true
-  dotenv:
-    path: .env
+  stage: ${opt:env, 'prod'}
