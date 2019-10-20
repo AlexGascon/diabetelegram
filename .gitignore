@@ -25,4 +25,4 @@ var/
 node_modules
 
 # .env file
-.env
+.env*
