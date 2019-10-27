@@ -31,3 +31,8 @@ def test_put_status_propagates_the_call_to_the_dynamo_client(dynamo):
         TableName='diabetelegram-status',
         Item={'user_id': {'S': '4321'}, 'status': {'S': 'final'}}
     )
+
+def test_put_status_returns_False_if_there_was_an_exception(dynamo):
+    dynamo._handler.put_item.side_effect = ValueError
+
+    assert dynamo.set_status('final', user_id=1234) == False
