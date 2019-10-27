@@ -8,7 +8,7 @@ class Dynamo:
         self._handler = boto3.client('dynamodb')
 
     def get_status(self, user_id):
-        query = self._compose_status_query(user_id='1234')
+        query = self._compose_status_query(user_id=user_id)
         response = self._handler.get_item(TableName=self.STATUS_TABLE_NAME, Key=query)
         return self._parse_status(response)
 
@@ -21,11 +21,11 @@ class Dynamo:
 
     def set_status(self, status, user_id):
         try:
-            item = self._compose_set_status_item(status=status, user_id=user_id)
-            response = self._handler.set_item(TableName=self.STATUS_TABLE_NAME, Item=item)
+            item = self._compose_status_item(status=status, user_id=user_id)
+            response = self._handler.put_item(TableName=self.STATUS_TABLE_NAME, Item=item)
             return True
         except Exception:
             return False
 
-    def _compose_set_status_item(self, status, user_id):
+    def _compose_status_item(self, status, user_id):
         return {'user_id': {'S': str(user_id), }, 'status': {'S': status}}
