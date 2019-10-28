@@ -1,0 +1,24 @@
+{
+    "Item": {
+        "value": {
+            "S": "initial"
+        },
+        "user_id": {
+            "S": "1234"
+        }
+    },
+    "ResponseMetadata": {
+        "RequestId": "dskljdlkjfdlkjfjiosfdoifewoiuf",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "server": "Server",
+            "date": "Sat, 26 Oct 2019 16:40:43 GMT",
+            "content-type": "application/x-amz-json-1.0",
+            "content-length": "57",
+            "connection": "keep-alive",
+            "x-amzn-requestid": "dskljdlkjfdlkjfjiosfdoifewoiuf",
+            "x-amz-crc32": "111111111111"
+        },
+        "RetryAttempts": 0
+    }
+}

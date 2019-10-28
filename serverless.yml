@@ -11,6 +11,12 @@ provider:
       Resource:
         - '${env:INSULIN_INJECTED_TOPIC_ARN}'
         - '${env:MEAL_EATEN_TOPIC_ARN}'
+    - Effect: 'Allow'
+      Action: 'dynamodb:*'
+      Resource:
+        - 'Fn::GetAtt': [ StateTable, Arn ]
+  environment:
+    stage: ${self:custom.stage}
 
 functions:
   hello:
@@ -20,6 +26,26 @@ functions:
       - http:
           path: /updates
           method: post
+
+resources: # Serverless.yml definition
+  Resources: # CloudFormation definition
+    StateTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: diabetelegram-state
+        # We can only define the columns used in the key/indexes, but the table can have more
+        AttributeDefinitions:
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user_id
+            KeyType: HASH
+        ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        Tags:
+          - Key: stage
+            Value: ${self:custom.stage}
 
 plugins:
   - serverless-python-requirements
