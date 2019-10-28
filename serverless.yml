@@ -14,7 +14,7 @@ provider:
     - Effect: 'Allow'
       Action: 'dynamodb:*'
       Resource:
-        - 'Fn::GetAtt': [ StatusTable, Arn ]
+        - 'Fn::GetAtt': [ StateTable, Arn ]
   environment:
     stage: ${self:custom.stage}
 
@@ -29,10 +29,10 @@ functions:
 
 resources: # Serverless.yml definition
   Resources: # CloudFormation definition
-    StatusTable:
+    StateTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: diabetelegram-status
+        TableName: diabetelegram-state
         # We can only define the columns used in the key/indexes, but the table can have more
         AttributeDefinitions:
           - AttributeName: user_id
