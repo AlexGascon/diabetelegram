@@ -1,20 +1,20 @@
 import pytest
 from unittest import mock
 
-from diabetelegram.actions.insulin_actions import InsulinAction, InsulinBasalAction, InsulinBolusAction
-
+from diabetelegram.actions.insulin_actions import InsulinAction, InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction
+from diabetelegram.models.injection import Injection
 
 @pytest.fixture
 def telegram(mocker):
     telegram_mock = mocker.patch('diabetelegram.actions.insulin_actions.TelegramWrapper')
-    telegram_mock.return_value = mocker.Mock()
-    return telegram_mock
+    telegram_instance = telegram_mock.return_value
+    return telegram_instance
 
 @pytest.fixture
 def sns_client(mocker):
     sns_mock = mocker.patch('diabetelegram.actions.insulin_actions.InjectionSNSClient')
-    sns_mock.return_value = mocker.Mock()
-    return sns_mock
+    sns_instance = sns_mock.return_value
+    return sns_instance
 
 class TestInsulinAction:
     @pytest.mark.parametrize('message', ['Insulin'], indirect=True)
@@ -37,7 +37,7 @@ class TestInsulinAction:
     def test_handle_sends_a_telegram_response(self, telegram, message, state):
         InsulinAction(message).handle()
 
-        telegram.reply.assert_called_once
+        telegram.reply.assert_called_once()
 
 
 class TestInsulinBasalAction:
@@ -67,7 +67,7 @@ class TestInsulinBasalAction:
     def test_handle_sends_a_telegram_response(self, telegram, message, state):
         InsulinBasalAction(message).handle()
 
-        telegram.reply.assert_called_once
+        telegram.reply.assert_called_once()
 
 
 class TestInsulinBolusAction:
@@ -97,4 +97,4 @@ class TestInsulinBolusAction:
     def test_handle_sends_a_telegram_response(self, telegram, message, state):
         InsulinBolusAction(message).handle()
 
-        telegram.reply.assert_called_once
+        telegram.reply.assert_called_once()
