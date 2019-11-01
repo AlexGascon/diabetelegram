@@ -1,6 +1,6 @@
 from diabetelegram.actions.base_action import BaseAction
 from diabetelegram.models.injection import Injection
-#from diabetelegram.services.injection_sns_client import InjectionSNSClient
+from diabetelegram.services.injection_sns_client import InjectionSNSClient
 from diabetelegram.services.state_manager import StateManager
 from diabetelegram.services.telegram import TelegramWrapper
 
@@ -44,3 +44,21 @@ class InsulinBolusAction(BaseAction):
 
         telegram = TelegramWrapper()
         telegram.reply(self.message, response)
+
+
+class InsulinUnitsAction(BaseAction):
+    def matches(self):
+        state = self.state_manager.get()
+        return (state == 'basal' or state == 'bolus') and self.message_text.isdigit()
+
+    def handle(self):
+        state = self.state_manager.get()
+        units = int(self.message_text)
+        injection = Injection(injection_type=state, units=units)
+
+        result = InjectionSNSClient().insulin_injected(injection)
+
+        self.state_manager.set('initial')
+
+        telegram = TelegramWrapper()
+        telegram.reply(self.message, result)

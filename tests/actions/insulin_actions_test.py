@@ -98,3 +98,48 @@ class TestInsulinBolusAction:
         InsulinBolusAction(message).handle()
 
         telegram.reply.assert_called_once()
+
+
+class TestInsulinUnitsAction:
+    @pytest.mark.parametrize('state, message', [('bolus', '18')], indirect=True)
+    def test_matches_if_the_message_is_an_integer_and_state_is_bolus(self, state, message):
+        units_action = InsulinUnitsAction(message)
+
+        assert units_action.matches()
+
+    @pytest.mark.parametrize('state, message', [('basal', '18')], indirect=True)
+    def test_matches_if_the_message_is_an_integer_and_state_is_basal(self, state, message):
+        units_action = InsulinUnitsAction(message)
+
+        assert units_action.matches()
+
+    @pytest.mark.parametrize('state, message', [('other_state', '185')], indirect=True)
+    def test_not_matches_if_state_is_not_basal_or_bolus(self, state, message):
+        units_action = InsulinUnitsAction(message)
+
+        assert not units_action.matches()
+
+    @pytest.mark.parametrize('state, message', [('basal', '18.5')], indirect=True)
+    def test_not_matches_if_message_is_not_an_integer(self, state, message):
+        units_action = InsulinUnitsAction(message)
+
+        assert not units_action.matches()
+
+    @pytest.mark.parametrize('message', ['22'], indirect=True)
+    def test_handle_sets_the_state_to_initial(self, state, message, telegram, sns_client):
+        InsulinUnitsAction(message).handle()
+
+        state.set.assert_called_with('initial')
+
+    @pytest.mark.parametrize('state, message', [('basal', '18')], indirect=True)
+    def test_handle_publishes_the_injection(self, state, message, telegram, sns_client):
+        InsulinUnitsAction(message).handle()
+
+        expected_injection = Injection(injection_type='basal', units=18)
+        sns_client.insulin_injected.assert_called_once_with(expected_injection)
+
+    @pytest.mark.parametrize('message', ['22'], indirect=True)
+    def test_handle_sets_the_state_to_initial(self, state, message, telegram, sns_client):
+        InsulinUnitsAction(message).handle()
+
+        telegram.reply.assert_called_once()
