@@ -52,4 +52,12 @@ def current_state_is_mocked(request):
 
 @pytest.fixture
 def message(request):
-    return {'text': request.param, 'from': {'id': 'dummy_id'}}
+    if custom_message_text_is_specified(request):
+        message_text = request.param
+    else:
+        message_text = 'dummy text'
+
+    return {'text': message_text, 'from': {'id': 'dummy_id'}}
+
+def custom_message_text_is_specified(request):
+    return hasattr(request, 'param')
