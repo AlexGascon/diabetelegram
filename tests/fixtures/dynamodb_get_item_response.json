@@ -1,6 +1,6 @@
 {
     "Item": {
-        "value": {
+        "state": {
             "S": "initial"
         },
         "user_id": {
