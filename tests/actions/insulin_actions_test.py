@@ -10,6 +10,11 @@ def telegram(mocker):
     telegram_mock.return_value = mocker.Mock()
     return telegram_mock
 
+@pytest.fixture
+def sns_client(mocker):
+    sns_mock = mocker.patch('diabetelegram.actions.insulin_actions.InjectionSNSClient')
+    sns_mock.return_value = mocker.Mock()
+    return sns_mock
 
 class TestInsulinAction:
     @pytest.mark.parametrize('message', ['Insulin'], indirect=True)
