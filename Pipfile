@@ -15,6 +15,7 @@ ipdb = "*"
 pylint = "<2.0.0"
 python-dotenv = "*"
 pytest-mock = "*"
+pytest-profiling = "*"
 
 [requires]
 python_version = "3.7"
