@@ -4,6 +4,7 @@ from unittest import mock
 from diabetelegram.actions.insulin_actions import InsulinAction, InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction
 from diabetelegram.models.injection import Injection
 
+
 @pytest.fixture
 def telegram(mocker):
     telegram_mock = mocker.patch('diabetelegram.actions.insulin_actions.TelegramWrapper')
@@ -18,13 +19,13 @@ def sns_client(mocker):
 
 class TestInsulinAction:
     @pytest.mark.parametrize('message', ['Insulin'], indirect=True)
-    def test_matches_if_the_message_text_is_insulin(self, message):
+    def test_matches_if_the_message_text_is_insulin(self, message, state):
         insulin_action = InsulinAction(message)
 
         assert insulin_action.matches()
 
     @pytest.mark.parametrize('message', ['some message'], indirect=True)
-    def test_does_not_match_if_the_message_text_is_other(self, message):
+    def test_does_not_match_if_the_message_text_is_other(self, message, state):
         insulin_action = InsulinAction(message)
 
         assert not insulin_action.matches()

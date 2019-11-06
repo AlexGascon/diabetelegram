@@ -6,15 +6,15 @@ from diabetelegram.services.state_manager import StateManager
 @pytest.fixture
 def state_manager(dynamo):
     state_manager = StateManager(user_id=1234)
-    state_manager._dynamo = dynamo
     return state_manager
 
 @pytest.fixture
 def dynamo(mocker):
-    dynamo_client = mocker.Mock()
-    dynamo_client.get_state.return_value = {'user_id': '1234', 'state': 'initial'}
-    dynamo_client.set_state.return_value = True
-    return dynamo_client
+    dynamo_mock = mocker.patch('diabetelegram.services.state_manager.Dynamo')
+    dynamo_instance = dynamo_mock.return_value
+    dynamo_instance.get_state.return_value = {'user_id': '1234', 'state': 'initial'}
+    dynamo_instance.set_state.return_value = True
+    return dynamo_instance
 
 def test_state_manager_get_retrieves_the_state(state_manager):
     assert 'initial' == state_manager.get()
