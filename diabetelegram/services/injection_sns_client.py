@@ -7,16 +7,15 @@ from diabetelegram.serializers.injection_serializer import InjectionSerializer
 
 
 class InjectionSNSClient:
-    INSULIN_INJECTED_TOPIC = os.environ['INSULIN_INJECTED_TOPIC_ARN']
-
     def __init__(self):
         self.sns = boto3.client('sns')
+        self.topic_name = os.environ['INSULIN_INJECTED_TOPIC_ARN']
 
     def insulin_injected(self, injection):
         """Notify that the user has injected insulin to himself"""
         
         sns_payload = {
-            'TopicArn': self.INSULIN_INJECTED_TOPIC,
+            'TopicArn': self.topic_name,
             'Message': json.dumps(InjectionSerializer(injection).to_dict())
         }
 

@@ -17,7 +17,7 @@ class Dynamo:
 
     def _parse_state(self, state_response):
         state = state_response['Item']
-        return {'user_id': state['user_id']['S'], 'state': state['value']['S']}
+        return {'user_id': state['user_id']['S'], 'state': state['state']['S']}
 
     def set_state(self, state, user_id):
         try:
