@@ -4,6 +4,11 @@ from unittest import mock
 from diabetelegram.models.meal import Meal
 
 
+pytest_plugins = [
+    "tests.fixtures.aws"
+]
+
+
 # Data
 @pytest.fixture
 def meal_data():
