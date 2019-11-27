@@ -4,6 +4,8 @@ import boto3
 import pytest
 from moto import mock_dynamodb2
 
+from tests.fixtures.dynamo_tables import TABLES
+
 
 @pytest.fixture(scope='function')
 def aws_credentials():
@@ -17,4 +19,10 @@ def aws_credentials():
 def mock_dynamodb(aws_credentials):
     """Mocked DynamoDB client"""
     with mock_dynamodb2():
-        yield
+        dynamodb = boto3.client('dynamodb')
+        create_tables(dynamodb)
+        yield dynamodb
+
+def create_tables(dynamodb):
+    for table in TABLES:
+        dynamodb.create_table(**table)

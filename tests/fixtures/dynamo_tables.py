@@ -9,3 +9,7 @@ STATE = {
         'KeyType': 'HASH'
     }]
 }
+
+TABLES = [
+    STATE
+]

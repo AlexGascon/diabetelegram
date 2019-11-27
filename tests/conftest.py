@@ -5,7 +5,8 @@ from diabetelegram.models.meal import Meal
 
 
 pytest_plugins = [
-    "tests.fixtures.aws"
+    "tests.fixtures.aws",
+    "tests.fixtures.functional"
 ]
 
 
