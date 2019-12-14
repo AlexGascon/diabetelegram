@@ -5,9 +5,9 @@ from diabetelegram.services.state_manager import StateManager
 
 
 @pytest.fixture
-def functional_dynamo(mock_dynamodb):
+def functional_dynamo(functional_dynamodb):
     dynamo = Dynamo()
-    dynamo._handler = mock_dynamodb
+    dynamo._handler = functional_dynamodb
     return dynamo
 
 @pytest.fixture
