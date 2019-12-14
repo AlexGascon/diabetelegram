@@ -14,8 +14,7 @@ class InsulinAction(BaseAction):
 
         response = "What type of insulin do you want to add?"
 
-        telegram = TelegramWrapper()
-        telegram.reply(self.message, response)
+        self.telegram.reply(self.message, response)
 
 
 class InsulinBasalAction(BaseAction):
@@ -28,8 +27,7 @@ class InsulinBasalAction(BaseAction):
 
         response = "How many units did you take?"
 
-        telegram = TelegramWrapper()
-        telegram.reply(self.message, response)
+        self.telegram.reply(self.message, response)
 
 
 class InsulinBolusAction(BaseAction):
@@ -42,8 +40,7 @@ class InsulinBolusAction(BaseAction):
 
         response = "How many units did you take?"
 
-        telegram = TelegramWrapper()
-        telegram.reply(self.message, response)
+        self.telegram.reply(self.message, response)
 
 
 class InsulinUnitsAction(BaseAction):
@@ -60,5 +57,4 @@ class InsulinUnitsAction(BaseAction):
 
         self.state_manager.set('initial')
 
-        telegram = TelegramWrapper()
-        telegram.reply(self.message, result)
+        self.telegram.reply(self.message, result)

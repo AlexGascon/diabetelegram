@@ -1,15 +1,11 @@
 import pytest
 from unittest import mock
 
-from diabetelegram.actions.insulin_actions import InsulinAction, InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction
+from diabetelegram.actions.constants import Actions
+from tests.fixtures.actions import MockActionFactory
+from diabetelegram.actions.insulin_actions import InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction
 from diabetelegram.models.injection import Injection
 
-
-@pytest.fixture
-def telegram(mocker):
-    telegram_mock = mocker.patch('diabetelegram.actions.insulin_actions.TelegramWrapper')
-    telegram_instance = telegram_mock.return_value
-    return telegram_instance
 
 @pytest.fixture
 def sns_client(mocker):
@@ -18,129 +14,159 @@ def sns_client(mocker):
     return sns_instance
 
 class TestInsulinAction:
+    def build_action(self, message):
+        return MockActionFactory.build(Actions.Insulin, message)
+
     @pytest.mark.parametrize('message', ['Insulin'], indirect=True)
-    def test_matches_if_the_message_text_is_insulin(self, message, state):
-        insulin_action = InsulinAction(message)
+    def test_matches_if_the_message_text_is_insulin(self, message):
+        insulin_action = self.build_action(message)
 
         assert insulin_action.matches()
 
     @pytest.mark.parametrize('message', ['some message'], indirect=True)
-    def test_does_not_match_if_the_message_text_is_other(self, message, state):
-        insulin_action = InsulinAction(message)
+    def test_does_not_match_if_the_message_text_is_other(self, message):
+        insulin_action = self.build_action(message)
 
         assert not insulin_action.matches()
 
-    def test_handle_sets_the_state_to_insulin(self, state, message, telegram):
-        InsulinAction(message).handle()
+    def test_handle_sets_the_state_to_insulin(self, message):
+        insulin_action = self.build_action(message)
 
-        state.set.assert_called_with('insulin')
+        insulin_action.handle()
 
-    def test_handle_sends_a_telegram_response(self, telegram, message, state):
-        InsulinAction(message).handle()
+        insulin_action.state_manager.set.assert_called_with('insulin')
 
-        telegram.reply.assert_called_once()
+    def test_handle_sends_a_telegram_response(self, message):
+        insulin_action = self.build_action(message)
+
+        insulin_action.handle()
+
+        insulin_action.telegram.reply.assert_called_once()
 
 
 class TestInsulinBasalAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.Basal, message, state_manager)
+
     @pytest.mark.parametrize('state, message', [('insulin', 'basal')], indirect=True)
     def test_matches_if_the_message_is_basal_and_state_is_insulin(self, state, message):
-        basal_action = InsulinBasalAction(message)
+        basal_action = self.build_action(message, state)
 
         assert basal_action.matches()
 
     @pytest.mark.parametrize('state, message', [('some state', 'basal')], indirect=True)
     def test_does_not_match_if_state_is_not_insulin(self, state, message):
-        basal_action = InsulinBasalAction(message)
+        basal_action = self.build_action(message, state)
 
         assert not basal_action.matches()
 
     @pytest.mark.parametrize('state, message', [('insulin', 'whatever')], indirect=True)
-    def test_matches_if_the_message_is_not_basal(self, state, message):
-        basal_action = InsulinBasalAction(message)
+    def test_does_not_match_if_the_message_is_not_basal(self, state, message):
+        basal_action = self.build_action(message, state)
 
         assert not basal_action.matches()
 
-    def test_handle_sets_the_state_to_basal(self, state, message, telegram):
-        InsulinBasalAction(message).handle()
+    def test_handle_sets_the_state_to_basal(self, state, message):
+        basal_action = self.build_action(message, state)
+
+        basal_action.handle()
 
         state.set.assert_called_with('basal')
 
-    def test_handle_sends_a_telegram_response(self, telegram, message, state):
-        InsulinBasalAction(message).handle()
+    def test_handle_sends_a_telegram_response(self, message, state):
+        basal_action = self.build_action(message, state)
 
-        telegram.reply.assert_called_once()
+        basal_action.handle()
+
+        basal_action.telegram.reply.assert_called_once()
 
 
 class TestInsulinBolusAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.Bolus, message, state_manager)
+
     @pytest.mark.parametrize('state, message', [('insulin', 'bolus')], indirect=True)
     def test_matches_if_the_message_is_bolus_and_state_is_insulin(self, state, message):
-        bolus_action = InsulinBolusAction(message)
+        bolus_action = self.build_action(message, state)
 
         assert bolus_action.matches()
 
     @pytest.mark.parametrize('state, message', [('some state', 'bolus')], indirect=True)
     def test_does_not_match_if_state_is_not_insulin(self, state, message):
-        bolus_action = InsulinBolusAction(message)
+        bolus_action = self.build_action(message, state)
 
         assert not bolus_action.matches()
 
     @pytest.mark.parametrize('state, message', [('insulin', 'whatever')], indirect=True)
-    def test_matches_if_the_message_is_not_bolus(self, state, message):
-        bolus_action = InsulinBolusAction(message)
+    def test_does_not_match_if_the_message_is_not_bolus(self, state, message):
+        bolus_action = self.build_action(message, state)
 
         assert not bolus_action.matches()
 
-    def test_handle_sets_the_state_to_bolus(self, state, message, telegram):
-        InsulinBolusAction(message).handle()
+    def test_handle_sets_the_state_to_bolus(self, state, message):
+        bolus_action = self.build_action(message, state)
+
+        bolus_action.handle()
 
         state.set.assert_called_with('bolus')
 
-    def test_handle_sends_a_telegram_response(self, telegram, message, state):
-        InsulinBolusAction(message).handle()
+    def test_handle_sends_a_telegram_response(self, message, state):
+        bolus_action = self.build_action(message, state)
 
-        telegram.reply.assert_called_once()
+        bolus_action.handle()
+
+        bolus_action.telegram.reply.assert_called_once()
 
 
 class TestInsulinUnitsAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.Units, message, state_manager)
+
     @pytest.mark.parametrize('state, message', [('bolus', '18')], indirect=True)
     def test_matches_if_the_message_is_an_integer_and_state_is_bolus(self, state, message):
-        units_action = InsulinUnitsAction(message)
+        units_action = self.build_action(message, state)
 
         assert units_action.matches()
 
     @pytest.mark.parametrize('state, message', [('basal', '18')], indirect=True)
     def test_matches_if_the_message_is_an_integer_and_state_is_basal(self, state, message):
-        units_action = InsulinUnitsAction(message)
+        units_action = self.build_action(message, state)
 
         assert units_action.matches()
 
     @pytest.mark.parametrize('state, message', [('other_state', '185')], indirect=True)
     def test_not_matches_if_state_is_not_basal_or_bolus(self, state, message):
-        units_action = InsulinUnitsAction(message)
+        units_action = self.build_action(message, state)
 
         assert not units_action.matches()
 
     @pytest.mark.parametrize('state, message', [('basal', '18.5')], indirect=True)
     def test_not_matches_if_message_is_not_an_integer(self, state, message):
-        units_action = InsulinUnitsAction(message)
+        units_action = self.build_action(message, state)
 
         assert not units_action.matches()
 
     @pytest.mark.parametrize('message', ['22'], indirect=True)
-    def test_handle_sets_the_state_to_initial(self, state, message, telegram, sns_client):
-        InsulinUnitsAction(message).handle()
+    def test_handle_sets_the_state_to_initial(self, state, message, sns_client):
+        units_action = self.build_action(message, state)
+
+        units_action.handle()
 
         state.set.assert_called_with('initial')
 
     @pytest.mark.parametrize('state, message', [('basal', '18')], indirect=True)
-    def test_handle_publishes_the_injection(self, state, message, telegram, sns_client):
-        InsulinUnitsAction(message).handle()
+    def test_handle_publishes_the_injection(self, state, message, sns_client):
+        units_action = self.build_action(message, state)
+
+        units_action.handle()
 
         expected_injection = Injection(injection_type='basal', units=18)
         sns_client.insulin_injected.assert_called_once_with(expected_injection)
 
     @pytest.mark.parametrize('message', ['22'], indirect=True)
-    def test_handle_sets_the_state_to_initial(self, state, message, telegram, sns_client):
-        InsulinUnitsAction(message).handle()
+    def test_handle_sets_the_state_to_initial(self, state, message, sns_client):
+        units_action = self.build_action(message, state)
 
-        telegram.reply.assert_called_once()
+        units_action.handle()
+
+        units_action.telegram.reply.assert_called_once()
