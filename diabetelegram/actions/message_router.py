@@ -1,19 +1,13 @@
-from diabetelegram.actions.insulin_actions import InsulinAction, InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction
+from diabetelegram.actions.constants import Actions
+from diabetelegram.actions.factory import ActionFactory
 
 class MessageRouter:
     """Sends a message to the action that corresponds for its processing"""
 
-    ACTIONS = [
-        InsulinAction,
-        InsulinBasalAction,
-        InsulinBolusAction,
-        InsulinUnitsAction
-    ]
-
     @classmethod
     def dispatch(cls, message):
-        for action_class in cls.ACTIONS:
-            action = action_class(message)
+        for action_class in Actions.ALL:
+            action = ActionFactory.build(action_class, message)
 
             if action.matches():
                 action.handle()
