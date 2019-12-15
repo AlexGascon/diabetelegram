@@ -47,6 +47,22 @@ resources: # Serverless.yml definition
         Tags:
           - Key: stage
             Value: ${self:custom.stage}
+    ExpenseTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+          TableName: algasbot-expenses
+          AttributeDefinitions:
+            - AttributeName: expense_id
+              AttributeType: N
+          KeySchema:
+            - AttributeName: expense_id
+              KeyType: HASH
+          ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          Tags:
+            - Key: stage
+              Value: ${self:custom.stage}
 
 plugins:
   - serverless-python-requirements
