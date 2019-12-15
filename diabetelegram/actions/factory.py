@@ -24,6 +24,10 @@ class ActionFactory:
         return cls.FACTORIES[action_class]
 
     @staticmethod
+    def expense_factory(*args):
+        return Actions.Expense(*args)
+
+    @staticmethod
     def basal_factory(*args):
         return Actions.Basal(*args)
 
@@ -36,6 +40,7 @@ class ActionFactory:
         return Actions.Units(*args)
 
     FACTORIES = {
+        Actions.Expense: expense_factory.__func__,
         Actions.Basal: basal_factory.__func__,
         Actions.Bolus: bolus_factory.__func__,
         Actions.Units: units_factory.__func__
