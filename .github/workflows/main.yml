@@ -12,6 +12,8 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
+    - name: Lock Pipfile dependencies in requirements.txt
+      run: pip install pipenv && pipenv lock -r > ./requirements.txt && pipenv lock -r -d > ./requirements-dev.txt
     - name: Install dependencies
       run: pip install -r ./requirements.txt && pip install -r ./requirements-dev.txt
     - name: Run tests

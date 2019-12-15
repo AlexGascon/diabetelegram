@@ -4,6 +4,12 @@ from unittest import mock
 from diabetelegram.models.meal import Meal
 
 
+pytest_plugins = [
+    "tests.fixtures.aws",
+    "tests.fixtures.functional"
+]
+
+
 # Data
 @pytest.fixture
 def meal_data():
@@ -39,7 +45,7 @@ def incomplete_meal():
 
 @pytest.fixture
 def state(request):
-    with mock.patch('diabetelegram.actions.base_action.StateManager') as mocked_state_manager:
+    with mock.patch('diabetelegram.actions.factory.StateManager') as mocked_state_manager:
         instance = mocked_state_manager.return_value
 
         if current_state_is_mocked(request):

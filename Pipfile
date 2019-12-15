@@ -16,6 +16,7 @@ pylint = "<2.0.0"
 python-dotenv = "*"
 pytest-mock = "*"
 pytest-profiling = "*"
+moto = "*"
 
 [requires]
 python_version = "3.7"

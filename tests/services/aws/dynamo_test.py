@@ -1,11 +1,13 @@
+from unittest import mock
+
 import pytest
 
 from diabetelegram.services.aws.dynamo import Dynamo
 from tests.helpers import load_fixture
 
 @pytest.fixture
-def dynamo(mocker):
-    with mocker.patch('boto3.client'):
+def dynamo():
+    with mock.patch('boto3.client'):
         dynamo_client = Dynamo()
     dynamo_client._handler.get_item.return_value = load_fixture('dynamodb_get_item_response.json')
     dynamo_client._handler.set_item.return_value = load_fixture('dynamodb_put_item_response.json')

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from diabetelegram.services.state_manager import StateManager
 
 
 class BaseAction(ABC):
-    def __init__(self, message):
+    def __init__(self, message, state_manager, telegram):
         self.message = message
-        self.state_manager = StateManager(user_id=message['from']['id'])
+        self.state_manager = state_manager
+        self.telegram = telegram
 
     @abstractmethod
     def matches(self):
