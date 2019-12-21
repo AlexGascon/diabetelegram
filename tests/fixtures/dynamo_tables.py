@@ -1,15 +1,3 @@
-EXPENSES = {
-    'TableName': 'algasbot-expenses',
-    'AttributeDefinitions': [{
-        'AttributeName': 'expense_id',
-        'AttributeType': 'N'
-    }],
-    'KeySchema': [{
-        'AttributeName': 'expense_id',
-        'KeyType': 'HASH'
-    }]
-}
-
 STATE = {
     'TableName': 'diabetelegram-state',
     'AttributeDefinitions': [{
@@ -23,6 +11,5 @@ STATE = {
 }
 
 TABLES = [
-    EXPENSES,
     STATE
 ]
