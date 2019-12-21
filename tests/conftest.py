@@ -1,6 +1,9 @@
 import pytest
 from unittest import mock
 
+import moto
+
+from diabetelegram.models.expense import Expense
 from diabetelegram.models.meal import Meal
 
 
@@ -9,6 +12,11 @@ pytest_plugins = [
     "tests.fixtures.functional"
 ]
 
+@pytest.fixture(scope="function", autouse=True)
+def mock_dynamodb(aws_credentials):
+    with moto.mock_dynamodb2() as dynamodb:
+        Expense.create_table()
+        yield
 
 # Data
 @pytest.fixture
