@@ -1,6 +1,9 @@
+from unittest import mock
+
 import pytest
 
 from diabetelegram.actions.constants import Actions
+from diabetelegram.models.expense import Expense
 from tests.fixtures.actions import MockActionFactory
 
 
@@ -57,3 +60,29 @@ class TestExpenseCategoryAction:
         action = self.build_action(message, state)
 
         assert not action.matches()
+
+    @pytest.mark.parametrize('state, message', [('expense', 'Eating out')], indirect=True)
+    def test_handle_creates_the_expense(self, message, state):
+        action = self.build_action(message, state)
+        count = Expense.count()
+
+        action.handle()
+
+        assert Expense.count() == count + 1
+
+    @pytest.mark.parametrize('state, message', [('expense', 'Eating out')], indirect=True)
+    def test_handle_sets_the_state_to_expense_amount(self, state, message):
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        mock_args, mock_kwargs = action.state_manager.set.call_args
+        assert mock_args[0].startswith('expense-amount-')
+
+    @pytest.mark.parametrize('state, message', [('expense', 'Eating out')], indirect=True)
+    def test_handle_sends_a_telegram_response(self, state, message):
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        action.telegram.reply.assert_called_once
