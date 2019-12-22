@@ -21,5 +21,6 @@ class Expense(Model):
     ]
 
     expense_id = UnicodeAttribute(hash_key=True, default=generate_expense_id)
-    amount = NumberAttribute()
     category = UnicodeAttribute()
+    amount = NumberAttribute(null=True)
+    notes = UnicodeAttribute(null=True)
