@@ -13,52 +13,16 @@ def sns_client(mocker):
     sns_instance = sns_mock.return_value
     return sns_instance
 
-class TestInsulinAction:
-    def build_action(self, message):
-        return MockActionFactory.build(Actions.Insulin, message)
-
-    @pytest.mark.parametrize('message', ['Insulin'], indirect=True)
-    def test_matches_if_the_message_text_is_insulin(self, message):
-        insulin_action = self.build_action(message)
-
-        assert insulin_action.matches()
-
-    @pytest.mark.parametrize('message', ['some message'], indirect=True)
-    def test_does_not_match_if_the_message_text_is_other(self, message):
-        insulin_action = self.build_action(message)
-
-        assert not insulin_action.matches()
-
-    def test_handle_sets_the_state_to_insulin(self, message):
-        insulin_action = self.build_action(message)
-
-        insulin_action.handle()
-
-        insulin_action.state_manager.set.assert_called_with('insulin')
-
-    def test_handle_sends_a_telegram_response(self, message):
-        insulin_action = self.build_action(message)
-
-        insulin_action.handle()
-
-        insulin_action.telegram.reply.assert_called_once()
-
 
 class TestInsulinBasalAction:
     def build_action(self, message, state_manager):
         return MockActionFactory.build(Actions.Basal, message, state_manager)
 
-    @pytest.mark.parametrize('state, message', [('insulin', 'basal')], indirect=True)
-    def test_matches_if_the_message_is_basal_and_state_is_insulin(self, state, message):
+    @pytest.mark.parametrize('state, message', [('whatever', 'basal')], indirect=True)
+    def test_matches_if_the_message_is_basal(self, state, message):
         basal_action = self.build_action(message, state)
 
         assert basal_action.matches()
-
-    @pytest.mark.parametrize('state, message', [('some state', 'basal')], indirect=True)
-    def test_does_not_match_if_state_is_not_insulin(self, state, message):
-        basal_action = self.build_action(message, state)
-
-        assert not basal_action.matches()
 
     @pytest.mark.parametrize('state, message', [('insulin', 'whatever')], indirect=True)
     def test_does_not_match_if_the_message_is_not_basal(self, state, message):
@@ -85,17 +49,11 @@ class TestInsulinBolusAction:
     def build_action(self, message, state_manager):
         return MockActionFactory.build(Actions.Bolus, message, state_manager)
 
-    @pytest.mark.parametrize('state, message', [('insulin', 'bolus')], indirect=True)
-    def test_matches_if_the_message_is_bolus_and_state_is_insulin(self, state, message):
+    @pytest.mark.parametrize('state, message', [('whatever', 'bolus')], indirect=True)
+    def test_matches_if_the_message_is_bolus(self, state, message):
         bolus_action = self.build_action(message, state)
 
         assert bolus_action.matches()
-
-    @pytest.mark.parametrize('state, message', [('some state', 'bolus')], indirect=True)
-    def test_does_not_match_if_state_is_not_insulin(self, state, message):
-        bolus_action = self.build_action(message, state)
-
-        assert not bolus_action.matches()
 
     @pytest.mark.parametrize('state, message', [('insulin', 'whatever')], indirect=True)
     def test_does_not_match_if_the_message_is_not_bolus(self, state, message):
