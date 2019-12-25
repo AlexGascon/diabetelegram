@@ -1,0 +1,1 @@
+serverless deploy --env prod

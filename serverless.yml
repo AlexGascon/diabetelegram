@@ -17,6 +17,7 @@ provider:
         - 'Fn::GetAtt': [ StateTable, Arn ]
   environment:
     stage: ${self:custom.stage}
+  profile: ${self:custom.profiles.${self:custom.stage}, 'beta'}
 
 functions:
   hello:
@@ -54,3 +55,6 @@ custom:
   pythonRequirements:
     usePipenv: true
   stage: ${opt:env, 'prod'}
+  profiles:
+    beta: beta
+    prod: default
