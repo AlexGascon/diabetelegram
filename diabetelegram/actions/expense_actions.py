@@ -43,3 +43,37 @@ class ExpenseCategoryAction(BaseAction):
 
     def _expense_category(self):
         return self.message_text
+
+
+class ExpenseAmountAction(BaseAction):
+    STATE_PREFIX = 'expense-amount-'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def matches(self):
+        return self._state_is_expense_amount() and self._message_is_an_amount()
+
+    def handle(self):
+        pass
+
+    @property
+    def expense(self):
+        if not self._expense:
+            self._expense = Expense.get(self._expense_id())
+
+        return self._expense
+
+    def _expense_id(self):
+        current_state = self.state_manager.get()
+        return current_state[len(self.STATE_PREFIX):]
+
+    def _state_is_expense_amount(self):
+        return self.state_manager.get().startswith(self.STATE_PREFIX)
+
+    def _message_is_an_amount(self):
+        try:
+            float(self.message_text)
+            return True
+        except ValueError:
+            return False

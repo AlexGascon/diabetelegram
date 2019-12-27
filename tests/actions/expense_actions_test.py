@@ -86,3 +86,38 @@ class TestExpenseCategoryAction:
         action.handle()
 
         action.telegram.reply.assert_called_once
+
+
+class TestExpenseAmountAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.ExpenseAmount, message, state_manager=state_manager)
+
+    @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
+    def test_matches_if_text_is_an_amount_and_state_is_expense_amount(self, message, state):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        assert action.matches()
+
+    @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', 'five')], indirect=True)
+    def test_does_not_match_if_text_is_not_an_amount(self, state, message):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        assert not action.matches()
+
+    @pytest.mark.parametrize('state, message', [('some state', '12.40')], indirect=True)
+    def test_does_not_match_if_state_is_not_expense_amount(self, message, state):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        assert not action.matches()
+
+    def test_handler_updates_the_expense(self):
+        pass
+
+    def test_handler_sets_the_next_state(self):
+        pass
+
+    def test_handler_sends_a_telegram_response(self):
+        pass
