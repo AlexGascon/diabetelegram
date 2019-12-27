@@ -113,11 +113,34 @@ class TestExpenseAmountAction:
 
         assert not action.matches()
 
-    def test_handler_updates_the_expense(self):
-        pass
+    @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
+    def test_handler_updates_the_expense(self, state, message):
+        expense = Expense(expense_id='abcdef', category='random category')
+        expense.save()
+        action = self.build_action(message, state)
 
-    def test_handler_sets_the_next_state(self):
-        pass
+        assert not expense.amount
 
-    def test_handler_sends_a_telegram_response(self):
-        pass
+        action.handle()
+
+        expense.refresh()
+        assert expense.amount == 12.40
+
+    @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
+    def test_handler_sets_the_next_state(self, state, message):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        mock_args, mock_kwargs = action.state_manager.set.call_args
+        assert mock_args[0].startswith('expense-notes-abcdef')
+
+    @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
+    def test_handler_sends_a_telegram_response(self, state, message):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        action.telegram.reply.assert_called_once()

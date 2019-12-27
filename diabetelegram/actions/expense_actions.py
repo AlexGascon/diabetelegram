@@ -47,15 +47,24 @@ class ExpenseCategoryAction(BaseAction):
 
 class ExpenseAmountAction(BaseAction):
     STATE_PREFIX = 'expense-amount-'
+    TELEGRAM_REPLY = 'Add a note for this expense'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._expense = None
 
     def matches(self):
         return self._state_is_expense_amount() and self._message_is_an_amount()
 
     def handle(self):
-        pass
+        amount = float(self.message_text)
+        self.expense.amount = amount
+        self.expense.save()
+
+        new_state = self._compose_new_state()
+        self.state_manager.set(new_state)
+
+        self.telegram.reply(self.message, self.TELEGRAM_REPLY)
 
     @property
     def expense(self):
@@ -77,3 +86,6 @@ class ExpenseAmountAction(BaseAction):
             return True
         except ValueError:
             return False
+
+    def _compose_new_state(self):
+        return f"expense-notes-{self.expense.expense_id}"
