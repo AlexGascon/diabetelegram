@@ -85,7 +85,7 @@ class TestExpenseCategoryAction:
 
         action.handle()
 
-        action.telegram.reply.assert_called_once
+        action.telegram.reply.assert_called_once()
 
 
 class TestExpenseAmountAction:
