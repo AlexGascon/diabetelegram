@@ -133,10 +133,59 @@ class TestExpenseAmountAction:
 
         action.handle()
 
-        mock_args, mock_kwargs = action.state_manager.set.call_args
-        assert mock_args[0].startswith('expense-notes-abcdef')
+        action.state_manager.set.assert_called_once_with('expense-notes-abcdef')
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
+    def test_handler_sends_a_telegram_response(self, state, message):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        action.telegram.reply.assert_called_once()
+
+
+class TestExpenseDescriptionAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.ExpenseDescription, message, state_manager=state_manager)
+
+    @pytest.mark.parametrize('state', [('expense-description-abcdef')], indirect=True)
+    def test_matches_if_state_is_expense_description(self, message, state):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        assert action.matches()
+
+    @pytest.mark.parametrize('state', [('random state')], indirect=True)
+    def test_does_not_match_if_text_is_not_expense_description(self, message, state):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        assert not action.matches()
+
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', 'Description of the expense')], indirect=True)
+    def test_handler_updates_the_expense(self, state, message):
+        expense = Expense(expense_id='abcdef', category='random category')
+        expense.save()
+        action = self.build_action(message, state)
+
+        assert not expense.notes
+
+        action.handle()
+
+        expense.refresh()
+        assert expense.notes == 'Description of the expense'.lower()
+
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', '12.40')], indirect=True)
+    def test_handler_sets_the_next_state(self, state, message):
+        Expense(expense_id='abcdef', category='random category').save()
+        action = self.build_action(message, state)
+
+        action.handle()
+
+        action.state_manager.set.assert_called_once_with('initial')
+
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', '12.40')], indirect=True)
     def test_handler_sends_a_telegram_response(self, state, message):
         Expense(expense_id='abcdef', category='random category').save()
         action = self.build_action(message, state)

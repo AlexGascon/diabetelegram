@@ -89,3 +89,37 @@ class ExpenseAmountAction(BaseAction):
 
     def _compose_new_state(self):
         return f"expense-notes-{self.expense.expense_id}"
+
+
+class ExpenseDescriptionAction(BaseAction):
+    STATE_PREFIX = 'expense-description-'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._expense = None
+
+    def matches(self):
+        return self._state.startswith(self.STATE_PREFIX)
+
+    def handle(self):
+        self.expense.notes = self.message_text
+        self.expense.save()
+
+        self.state_manager.set('initial')
+
+        self.telegram.reply(self.message, f'Expense {self.expense.expense_id} published')
+
+    @property
+    def expense(self):
+        if not self._expense:
+            self._expense = Expense.get(self._expense_id())
+
+        return self._expense
+
+    def _expense_id(self):
+        current_state = self.state_manager.get()
+        return current_state[len(self.STATE_PREFIX):]
+
+    @property
+    def _state(self):
+        return self.state_manager.get()

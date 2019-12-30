@@ -36,6 +36,10 @@ class ActionFactory:
         return Actions.ExpenseCategory(*args)
 
     @staticmethod
+    def expense_description_factory(*args):
+        return Actions.ExpenseDescription(*args)
+
+    @staticmethod
     def basal_factory(*args):
         return Actions.Basal(*args)
 
@@ -51,6 +55,7 @@ class ActionFactory:
         Actions.Expense: expense_factory.__func__,
         Actions.ExpenseAmount: expense_amount_factory.__func__,
         Actions.ExpenseCategory: expense_category_factory.__func__,
+        Actions.ExpenseDescription: expense_description_factory.__func__,
         Actions.Basal: basal_factory.__func__,
         Actions.Bolus: bolus_factory.__func__,
         Actions.Units: units_factory.__func__
