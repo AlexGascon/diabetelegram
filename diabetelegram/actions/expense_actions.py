@@ -105,11 +105,12 @@ class ExpenseDescriptionAction(BaseAction):
         self.expense.notes = self.message_text
         self.expense.save()
 
-        ExpenseSNSClient().money_spent(self.expense)
+        message_id = ExpenseSNSClient().money_spent(self.expense)
 
         self.state_manager.set('initial')
 
-        self.telegram.reply(self.message, f'Expense {self.expense.expense_id} published')
+        reply = f'Expense {self.expense.expense_id} published.\nMessage ID: {message_id}'
+        self.telegram.reply(self.message, reply)
 
     @property
     def expense(self):
