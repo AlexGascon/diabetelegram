@@ -92,7 +92,7 @@ class ExpenseAmountAction(BaseAction):
 
 
 class ExpenseDescriptionAction(BaseAction):
-    STATE_PREFIX = 'expense-description-'
+    STATE_PREFIX = 'expense-notes-'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
