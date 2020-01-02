@@ -193,3 +193,21 @@ class TestExpenseDescriptionAction:
         action.handle()
 
         action.telegram.reply.assert_called_once()
+
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', 'Description of the expense')], indirect=True)
+    def test_handle_publishes_the_expense(self, state, message, sns_client):
+        expected_expense = Expense(expense_id='abcdef', category='Some category', amount=42.24, notes='description of the expense')
+        expected_expense.save()
+        action = self.build_action(message, state)
+        action._expense = expected_expense
+
+        action.handle()
+
+        sns_client.money_spent.assert_called_once_with(expected_expense)
+
+
+@pytest.fixture
+def sns_client(mocker):
+    sns_mock = mocker.patch('diabetelegram.actions.expense_actions.ExpenseSNSClient')
+    sns_instance = sns_mock.return_value
+    return sns_instance

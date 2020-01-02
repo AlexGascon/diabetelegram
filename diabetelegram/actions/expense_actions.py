@@ -1,6 +1,6 @@
 from diabetelegram.actions.base_action import BaseAction
 from diabetelegram.models.expense import Expense
-
+from diabetelegram.services.expense_sns_client import ExpenseSNSClient
 
 class ExpenseAction(BaseAction):
     EXPENSE_MESSAGE = 'expense'
@@ -104,6 +104,8 @@ class ExpenseDescriptionAction(BaseAction):
     def handle(self):
         self.expense.notes = self.message_text
         self.expense.save()
+
+        ExpenseSNSClient().money_spent(self.expense)
 
         self.state_manager.set('initial')
 
