@@ -114,7 +114,7 @@ class TestExpenseAmountAction:
         assert not action.matches()
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
-    def test_handler_updates_the_expense(self, state, message):
+    def test_handle_updates_the_expense(self, state, message):
         expense = Expense(expense_id='abcdef', category='random category')
         expense.save()
         action = self.build_action(message, state)
@@ -127,7 +127,7 @@ class TestExpenseAmountAction:
         assert expense.amount == 12.40
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
-    def test_handler_sets_the_next_state(self, state, message):
+    def test_handle_sets_the_next_state(self, state, message):
         Expense(expense_id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
@@ -136,7 +136,7 @@ class TestExpenseAmountAction:
         action.state_manager.set.assert_called_once_with('expense-notes-abcdef')
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
-    def test_handler_sends_a_telegram_response(self, state, message):
+    def test_handle_sends_a_telegram_response(self, state, message):
         Expense(expense_id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
@@ -164,7 +164,7 @@ class TestExpenseDescriptionAction:
         assert not action.matches()
 
     @pytest.mark.parametrize('state, message', [('expense-description-abcdef', 'Description of the expense')], indirect=True)
-    def test_handler_updates_the_expense(self, state, message):
+    def test_handle_updates_the_expense(self, state, message, sns_client):
         expense = Expense(expense_id='abcdef', category='random category')
         expense.save()
         action = self.build_action(message, state)
@@ -176,8 +176,8 @@ class TestExpenseDescriptionAction:
         expense.refresh()
         assert expense.notes == 'Description of the expense'.lower()
 
-    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', '12.40')], indirect=True)
-    def test_handler_sets_the_next_state(self, state, message):
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', 'Description of the expense')], indirect=True)
+    def test_handle_sets_the_next_state(self, state, message, sns_client):
         Expense(expense_id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
@@ -185,8 +185,8 @@ class TestExpenseDescriptionAction:
 
         action.state_manager.set.assert_called_once_with('initial')
 
-    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', '12.40')], indirect=True)
-    def test_handler_sends_a_telegram_response(self, state, message):
+    @pytest.mark.parametrize('state, message', [('expense-description-abcdef', 'Description of the expense')], indirect=True)
+    def test_handle_sends_a_telegram_response(self, state, message, sns_client):
         Expense(expense_id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
