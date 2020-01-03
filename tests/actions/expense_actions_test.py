@@ -94,28 +94,28 @@ class TestExpenseAmountAction:
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
     def test_matches_if_text_is_an_amount_and_state_is_expense_amount(self, message, state):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         assert action.matches()
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', 'five')], indirect=True)
     def test_does_not_match_if_text_is_not_an_amount(self, state, message):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         assert not action.matches()
 
     @pytest.mark.parametrize('state, message', [('some state', '12.40')], indirect=True)
     def test_does_not_match_if_state_is_not_expense_amount(self, message, state):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         assert not action.matches()
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
     def test_handle_updates_the_expense(self, state, message):
-        expense = Expense(expense_id='abcdef', category='random category')
+        expense = Expense(id='abcdef', category='random category')
         expense.save()
         action = self.build_action(message, state)
 
@@ -128,7 +128,7 @@ class TestExpenseAmountAction:
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
     def test_handle_sets_the_next_state(self, state, message):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         action.handle()
@@ -137,7 +137,7 @@ class TestExpenseAmountAction:
 
     @pytest.mark.parametrize('state, message', [('expense-amount-abcdef', '12.40')], indirect=True)
     def test_handle_sends_a_telegram_response(self, state, message):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         action.handle()
@@ -151,21 +151,21 @@ class TestExpenseDescriptionAction:
 
     @pytest.mark.parametrize('state', [('expense-notes-abcdef')], indirect=True)
     def test_matches_if_state_is_expense_description(self, message, state):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         assert action.matches()
 
     @pytest.mark.parametrize('state', [('random state')], indirect=True)
     def test_does_not_match_if_text_is_not_expense_description(self, message, state):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         assert not action.matches()
 
     @pytest.mark.parametrize('state, message', [('expense-notes-abcdef', 'Description of the expense')], indirect=True)
     def test_handle_updates_the_expense(self, state, message, sns_client):
-        expense = Expense(expense_id='abcdef', category='random category')
+        expense = Expense(id='abcdef', category='random category')
         expense.save()
         action = self.build_action(message, state)
 
@@ -178,7 +178,7 @@ class TestExpenseDescriptionAction:
 
     @pytest.mark.parametrize('state, message', [('expense-notes-abcdef', 'Description of the expense')], indirect=True)
     def test_handle_sets_the_next_state(self, state, message, sns_client):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         action.handle()
@@ -187,7 +187,7 @@ class TestExpenseDescriptionAction:
 
     @pytest.mark.parametrize('state, message', [('expense-notes-abcdef', 'Description of the expense')], indirect=True)
     def test_handle_sends_a_telegram_response(self, state, message, sns_client):
-        Expense(expense_id='abcdef', category='random category').save()
+        Expense(id='abcdef', category='random category').save()
         action = self.build_action(message, state)
 
         action.handle()
@@ -196,7 +196,7 @@ class TestExpenseDescriptionAction:
 
     @pytest.mark.parametrize('state, message', [('expense-notes-abcdef', 'Description of the expense')], indirect=True)
     def test_handle_publishes_the_expense(self, state, message, sns_client):
-        expected_expense = Expense(expense_id='abcdef', category='Some category', amount=42.24, notes='description of the expense')
+        expected_expense = Expense(id='abcdef', category='Some category', amount=42.24, notes='description of the expense')
         expected_expense.save()
         action = self.build_action(message, state)
         action._expense = expected_expense

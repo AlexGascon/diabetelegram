@@ -8,7 +8,7 @@ class ExpenseSerializer:
 
     def to_dict(self):
         data = {
-            'expense_id': self.expense.expense_id,
+            'id': self.expense.id,
             'amount': self.expense.amount,
             'category': self.expense.category,
             'notes': self.expense.notes

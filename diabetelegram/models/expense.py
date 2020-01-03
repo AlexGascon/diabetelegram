@@ -20,7 +20,7 @@ class Expense(Model):
         'supermercado'
     ]
 
-    expense_id = UnicodeAttribute(hash_key=True, default=generate_expense_id)
+    id = UnicodeAttribute(hash_key=True, default=generate_expense_id)
     category = UnicodeAttribute()
     amount = NumberAttribute(null=True)
     notes = UnicodeAttribute(null=True)

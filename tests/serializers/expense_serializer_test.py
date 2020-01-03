@@ -13,7 +13,7 @@ def test_to_dict():
     assert serialized['amount'] == amount
     assert serialized['category'] == category
     assert serialized['notes'] == notes
-    assert serialized['expense_id'] == expense.expense_id
+    assert serialized['id'] == expense.id
 
 def test_to_dict_with_incomplete_expense():
     amount = 12
@@ -25,4 +25,4 @@ def test_to_dict_with_incomplete_expense():
     assert serialized['amount'] == amount
     assert serialized['category'] == category
     assert 'notes' not in serialized
-    assert serialized['expense_id'] == expense.expense_id
+    assert serialized['id'] == expense.id

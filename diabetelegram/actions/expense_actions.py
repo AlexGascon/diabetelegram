@@ -39,7 +39,7 @@ class ExpenseCategoryAction(BaseAction):
         return self._expense_category() in Expense.CATEGORIES
 
     def _compose_new_state(self, expense):
-        return f"expense-amount-{expense.expense_id}"
+        return f"expense-amount-{expense.id}"
 
     def _expense_category(self):
         return self.message_text
@@ -88,7 +88,7 @@ class ExpenseAmountAction(BaseAction):
             return False
 
     def _compose_new_state(self):
-        return f"expense-notes-{self.expense.expense_id}"
+        return f"expense-notes-{self.expense.id}"
 
 
 class ExpenseDescriptionAction(BaseAction):
@@ -109,7 +109,7 @@ class ExpenseDescriptionAction(BaseAction):
 
         self.state_manager.set('initial')
 
-        reply = f'Expense {self.expense.expense_id} published.\nMessage ID: {message_id}'
+        reply = f'Expense {self.expense.id} published.\nMessage ID: {message_id}'
         self.telegram.reply(self.message, reply)
 
     @property
