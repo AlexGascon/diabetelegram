@@ -4,7 +4,7 @@ from diabetelegram.serializers.expense_serializer import ExpenseSerializer
 
 def test_to_dict():
     amount = 12
-    category = 'eating out'
+    category = 'Eating out'
     notes = 'Data of the expense'
 
     expense = Expense(amount=amount, notes=notes, category=category)
@@ -17,7 +17,7 @@ def test_to_dict():
 
 def test_to_dict_with_incomplete_expense():
     amount = 12
-    category = 'eating out'
+    category = 'Eating out'
 
     expense = Expense(amount=amount, category=category)
     serialized = ExpenseSerializer(expense).to_dict()
