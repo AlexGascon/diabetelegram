@@ -17,4 +17,4 @@ class BaseAction(ABC):
 
     @property
     def message_text(self):
-        return self.message['text'].lower()
+        return self.message['text']

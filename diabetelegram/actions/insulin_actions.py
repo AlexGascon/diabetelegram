@@ -7,7 +7,7 @@ from diabetelegram.services.telegram import TelegramWrapper
 
 class InsulinBasalAction(BaseAction):
     def matches(self):
-        return self.message_text == 'basal'
+        return self.message_text.lower() == 'basal'
 
     def handle(self):
         self.state_manager.set('basal')
@@ -19,7 +19,7 @@ class InsulinBasalAction(BaseAction):
 
 class InsulinBolusAction(BaseAction):
     def matches(self):
-        return self.message_text == 'bolus'
+        return self.message_text.lower() == 'bolus'
 
     def handle(self):
         self.state_manager.set('bolus')

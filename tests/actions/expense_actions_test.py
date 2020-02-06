@@ -186,7 +186,7 @@ class TestExpenseDescriptionAction:
         action.handle()
 
         expense.refresh()
-        assert expense.notes == 'Description of the expense'.lower()
+        assert expense.notes == 'Description of the expense'
 
     @pytest.mark.parametrize('state, message', [('expense-notes-abcdef', 'Description of the expense')], indirect=True)
     def test_handle_sets_the_next_state(self, state, message, sns_client):

@@ -8,7 +8,7 @@ class ExpenseAction(BaseAction):
     TELEGRAM_REPLY = "Select the expense category"
 
     def matches(self):
-        return self.message_text == self.EXPENSE_MESSAGE
+        return self.message_text.lower() == self.EXPENSE_MESSAGE
 
     def handle(self):
         self.state_manager.set(self.EXPENSE_STATE)
@@ -36,7 +36,7 @@ class ExpenseCategoryAction(BaseAction):
         return self.state_manager.get() == self.EXPENSE_STATE
 
     def _category_is_valid(self):
-        return self._expense_category() in Expense.CATEGORIES
+        return self._expense_category().lower() in Expense.CATEGORIES
 
     def _compose_new_state(self, expense):
         return f"expense-amount-{expense.id}"
