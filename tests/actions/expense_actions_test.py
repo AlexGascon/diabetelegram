@@ -17,6 +17,12 @@ class TestExpenseAction:
 
         assert expense_action.matches()
 
+    @pytest.mark.parametrize('message', ['EXPENSE'], indirect=True)
+    def test_matches_is_case_insensitive(self, message):
+        expense_action = self.build_action(message)
+
+        assert expense_action.matches()
+
     @pytest.mark.parametrize('message', ['some text'], indirect=True)
     def test_not_matches_on_other_message_texts(self, message):
         expense_action = self.build_action(message)
@@ -45,6 +51,12 @@ class TestExpenseCategoryAction:
 
     @pytest.mark.parametrize('state, message', [('expense', 'Eating out')], indirect=True)
     def test_matches_when_the_state_is_expense_and_the_category_is_allowed(self, state, message):
+        action = self.build_action(message, state)
+
+        assert action.matches()
+
+    @pytest.mark.parametrize('state, message', [('expense', 'EATING OUT')], indirect=True)
+    def test_matches_is_case_insensitive(self, state, message):
         action = self.build_action(message, state)
 
         assert action.matches()

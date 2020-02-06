@@ -24,6 +24,12 @@ class TestInsulinBasalAction:
 
         assert basal_action.matches()
 
+    @pytest.mark.parametrize('state, message', [('whatever', 'BASAL')], indirect=True)
+    def test_matches_is_case_insensitive(self, state, message):
+        basal_action = self.build_action(message, state)
+
+        assert basal_action.matches()
+
     @pytest.mark.parametrize('state, message', [('insulin', 'whatever')], indirect=True)
     def test_does_not_match_if_the_message_is_not_basal(self, state, message):
         basal_action = self.build_action(message, state)
@@ -51,6 +57,12 @@ class TestInsulinBolusAction:
 
     @pytest.mark.parametrize('state, message', [('whatever', 'bolus')], indirect=True)
     def test_matches_if_the_message_is_bolus(self, state, message):
+        bolus_action = self.build_action(message, state)
+
+        assert bolus_action.matches()
+
+    @pytest.mark.parametrize('state, message', [('whatever', 'BOLUS')], indirect=True)
+    def test_matches_is_case_insensitive(self, state, message):
         bolus_action = self.build_action(message, state)
 
         assert bolus_action.matches()
