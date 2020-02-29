@@ -13,6 +13,12 @@ def sns_client(mocker):
     sns_instance = sns_mock.return_value
     return sns_instance
 
+@pytest.fixture
+def sns_summary_client(mocker):
+    sns_mock = mocker.patch('diabetelegram.actions.insulin_actions.SummarySNSClient')
+    sns_instance = sns_mock.return_value
+    return sns_instance
+
 
 class TestInsulinBasalAction:
     def build_action(self, message, state_manager):
@@ -140,3 +146,41 @@ class TestInsulinUnitsAction:
         units_action.handle()
 
         units_action.telegram.reply.assert_called_once()
+
+
+class TestInsulinSummaryAction:
+    def build_action(self, message, state_manager):
+        return MockActionFactory.build(Actions.InsulinSummary, message, state_manager)
+
+    @pytest.mark.parametrize('message', ['summary'], indirect=True)
+    def test_matches_if_the_message_is_summary(self, state, message):
+        summary_action = self.build_action(message, state)
+
+        assert summary_action.matches()
+
+    @pytest.mark.parametrize('message', ['SUMMARY'], indirect=True)
+    def test_matches_is_case_insensitive(self, state, message):
+        summary_action = self.build_action(message, state)
+
+        assert summary_action.matches()
+
+    @pytest.mark.parametrize('message', ['whatever'], indirect=True)
+    def test_does_not_match_if_the_message_is_not_summary(self, state, message):
+        summary_action = self.build_action(message, state)
+
+        assert not summary_action.matches()
+
+    def test_handle_requests_the_summary(self, sns_summary_client, message, state):
+        summary_action = self.build_action(message, state)
+
+        summary_action.handle()
+
+        sns_summary_client.summary_requested.assert_called_once()
+
+    @pytest.mark.parametrize('message', ['summary'], indirect=True)
+    def test_handle_sets_the_state_to_initial(self, state, message, sns_summary_client):
+        summary_action = self.build_action(message, state)
+
+        summary_action.handle()
+
+        state.set.assert_called_with('initial')

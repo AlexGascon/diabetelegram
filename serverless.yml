@@ -12,6 +12,7 @@ provider:
         - '${env:INSULIN_INJECTED_TOPIC_ARN}'
         - '${env:MEAL_EATEN_TOPIC_ARN}'
         - '${env:MONEY_SPENT_TOPIC_ARN}'
+        - '${env:SUMMARY_REQUESTED_TOPIC_ARN}'
     - Effect: 'Allow'
       Action: 'dynamodb:*'
       Resource:
