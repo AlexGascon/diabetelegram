@@ -1,6 +1,7 @@
 from diabetelegram.actions.base_action import BaseAction
 from diabetelegram.models.injection import Injection
 from diabetelegram.services.injection_sns_client import InjectionSNSClient
+from diabetelegram.services.summary_sns_client import SummarySNSClient
 from diabetelegram.services.state_manager import StateManager
 from diabetelegram.services.telegram import TelegramWrapper
 
@@ -44,3 +45,13 @@ class InsulinUnitsAction(BaseAction):
         self.state_manager.set('initial')
 
         self.telegram.reply(self.message, result)
+
+
+class InsulinSummaryAction(BaseAction):
+    def matches(self):
+        return self.message_text.lower() == 'summary'
+
+    def handle(self):
+        SummarySNSClient().summary_requested()
+
+        self.state_manager.set('initial')
