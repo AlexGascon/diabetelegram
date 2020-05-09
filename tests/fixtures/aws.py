@@ -27,3 +27,8 @@ def functional_dynamodb(aws_credentials):
 def create_tables(dynamodb):
     for table in TABLES:
         dynamodb.create_table(**table)
+
+@pytest.fixture
+def s3(aws_credentials):
+    with moto.mock_s3():
+        yield boto3.client('s3')
