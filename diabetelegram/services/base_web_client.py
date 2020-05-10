@@ -3,8 +3,10 @@ import os
 
 class BaseWebClient:
     """Handles interactions with the Diabetes API"""
-    API_URL = os.environ['DIABETES_API_URL']
-    API_TOKEN = os.environ['DIABETES_API_TOKEN']
+
+    def __init__(self):
+        self.API_URL = os.environ['DIABETES_API_URL']
+        self.API_TOKEN = os.environ['DIABETES_API_TOKEN']
 
     def _build_headers(self):
         return {'apikey': self.API_TOKEN}

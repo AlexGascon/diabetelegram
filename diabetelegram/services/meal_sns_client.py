@@ -7,10 +7,10 @@ from diabetelegram.serializers.meal_serializer import MealSerializer
 
 
 class MealSNSClient:
-    MEAL_EATEN_TOPIC = os.environ['MEAL_EATEN_TOPIC_ARN']
 
     def __init__(self):
         self.sns = boto3.client('sns')
+        self.MEAL_EATEN_TOPIC = os.environ['MEAL_EATEN_TOPIC_ARN']
 
     def meal_eaten(self, meal):
         """Notify that the user has eat"""
