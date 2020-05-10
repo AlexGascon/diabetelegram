@@ -3,17 +3,15 @@ import os
 
 import boto3
 
+from diabetelegram.services.aws.sns.base_sns_client import BaseSNSClient
 
-class SummarySNSClient:
-    def __init__(self):
-        self.sns = boto3.client('sns')
-        self.topic_name = os.environ['SUMMARY_REQUESTED_TOPIC_ARN']
 
+class SummarySNSClient(BaseSNSClient):
     def summary_requested(self):
-        sns_payload = {
-            'TopicArn': self.topic_name,
-            'Message': json.dumps({})
-        }
+        return self.publish()
 
-        response = self.sns.publish(**sns_payload)
-        return response['MessageId']
+    def get_topic_name(self):
+        return os.environ['SUMMARY_REQUESTED_TOPIC_ARN']
+
+    def build_payload(self, _subject):
+        return json.dumps({})

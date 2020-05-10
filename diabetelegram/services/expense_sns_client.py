@@ -4,18 +4,15 @@ import os
 import boto3
 
 from diabetelegram.serializers.expense_serializer import ExpenseSerializer
+from diabetelegram.services.aws.sns.base_sns_client import BaseSNSClient
 
 
-class ExpenseSNSClient:
-    def __init__(self):
-        self.sns = boto3.client('sns')
-        self.topic_name = os.environ['MONEY_SPENT_TOPIC_ARN']
-
+class ExpenseSNSClient(BaseSNSClient):
     def money_spent(self, expense):
-        sns_payload = {
-            'TopicArn': self.topic_name,
-            'Message': json.dumps(ExpenseSerializer(expense).to_dict())
-        }
+        return self.publish(expense)
 
-        response = self.sns.publish(**sns_payload)
-        return response['MessageId']
+    def build_payload(self, expense):
+        return json.dumps(ExpenseSerializer(expense).to_dict())
+
+    def get_topic_name(self):
+        return os.environ['MONEY_SPENT_TOPIC_ARN']
