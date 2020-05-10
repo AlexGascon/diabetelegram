@@ -21,47 +21,9 @@ class ActionFactory:
 
     @classmethod
     def get_factory(cls, action_class):
-        return cls.FACTORIES[action_class]
+        if action_class in cls.COMPLEX_FACTORIES:
+            return cls.COMPLEX_FACTORIES.get(action_class)
+        else:
+            return lambda *args: action_class(*args)
 
-    @staticmethod
-    def expense_factory(*args):
-        return Actions.Expense(*args)
-
-    @staticmethod
-    def expense_amount_factory(*args):
-        return Actions.ExpenseAmount(*args)
-
-    @staticmethod
-    def expense_category_factory(*args):
-        return Actions.ExpenseCategory(*args)
-
-    @staticmethod
-    def expense_description_factory(*args):
-        return Actions.ExpenseDescription(*args)
-
-    @staticmethod
-    def basal_factory(*args):
-        return Actions.Basal(*args)
-
-    @staticmethod
-    def bolus_factory(*args):
-        return Actions.Bolus(*args)
-
-    @staticmethod
-    def units_factory(*args):
-        return Actions.Units(*args)
-
-    @staticmethod
-    def insulin_summary_factory(*args):
-        return Actions.InsulinSummary(*args)
-
-    FACTORIES = {
-        Actions.Expense: expense_factory.__func__,
-        Actions.ExpenseAmount: expense_amount_factory.__func__,
-        Actions.ExpenseCategory: expense_category_factory.__func__,
-        Actions.ExpenseDescription: expense_description_factory.__func__,
-        Actions.Basal: basal_factory.__func__,
-        Actions.Bolus: bolus_factory.__func__,
-        Actions.Units: units_factory.__func__,
-        Actions.InsulinSummary: insulin_summary_factory.__func__
-    }
+    COMPLEX_FACTORIES = {}

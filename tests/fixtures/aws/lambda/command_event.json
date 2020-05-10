@@ -1,0 +1,105 @@
+{
+    "resource": "/updates",
+    "path": "/updates",
+    "httpMethod": "POST",
+    "headers": {
+        "Accept-Encoding": "gzip, deflate",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-Country": "GB",
+        "Content-Type": "application/json",
+        "Host": "fhbjkcre623.execute-api.eu-west-1.amazonaws.com",
+        "Via": "1.1 de7dencbdi37219347dcxnx2823.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "DSE57L1yiz8M0OSon7PiHpRDH1SsPcm9Tp5Jpi0R-AJGKgVnpMiNoA==",
+        "X-Amzn-Trace-Id": "Root=1-5eb7ca71-6f6ad5e82daf1ebaac41ae76",
+        "X-Forwarded-For": "91.108.6.97, 130.176.6.140",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "Accept-Encoding": [
+            "gzip, deflate"
+        ],
+        "CloudFront-Forwarded-Proto": [
+            "https"
+        ],
+        "CloudFront-Is-Desktop-Viewer": [
+            "true"
+        ],
+        "CloudFront-Is-Mobile-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-SmartTV-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-Tablet-Viewer": [
+            "false"
+        ],
+        "CloudFront-Viewer-Country": [
+            "GB"
+        ],
+        "Content-Type": [
+            "application/json"
+        ],
+        "Host": [
+            "fhbjkcre623.execute-api.eu-west-1.amazonaws.com"
+        ],
+        "Via": [
+            "1.1 de7dencbdi37219347dcxnx2823.cloudfront.net (CloudFront)"
+        ],
+        "X-Amz-Cf-Id": [
+            "DSE57L1yiz8M0OSon7PiHpRDH1SsPcm9Tp5Jpi0R-AJGKgVnpMiNoA=="
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-5eb7ca71-6f6ad5e82daf1ebaac41ae76"
+        ],
+        "X-Forwarded-For": [
+            "91.108.6.97, 130.176.6.140"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "oh7le7",
+        "resourcePath": "/updates",
+        "httpMethod": "POST",
+        "extendedRequestId": "MTyR0G5EjoEF3FA=",
+        "requestTime": "10/May/2020:09:33:37 +0000",
+        "path": "/prod/updates",
+        "accountId": "598877714121",
+        "protocol": "HTTP/1.1",
+        "stage": "prod",
+        "domainPrefix": "htp4hzyqwh",
+        "requestTimeEpoch": 1589103217908,
+        "requestId": "12153a4f-41ab-4d4c-8f28-078c35d58181",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "sourceIp": "91.108.6.97",
+            "principalOrgId": null,
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": null,
+            "user": null
+        },
+        "domainName": "fhbjkcre623.execute-api.eu-west-1.amazonaws.com",
+        "apiId": "fhbjkcre623"
+    },
+    "body": "{\"update_id\":673566802,\n\"message\":{\"message_id\":6969,\"from\":{\"id\":713744,\"is_bot\":false,\"first_name\":\"Alex\",\"last_name\":\"Gasc\\u00f3n\",\"username\":\"AlexGascon\",\"language_code\":\"es\"},\"chat\":{\"id\":713744,\"first_name\":\"Alex\",\"last_name\":\"Gasc\\u00f3n\",\"username\":\"AlexGascon\",\"type\":\"private\"},\"date\":1589103217,\"text\":\"/start\"}}",
+    "isBase64Encoded": false
+}
