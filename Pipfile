@@ -18,6 +18,7 @@ python-dotenv = "*"
 pytest-mock = "*"
 pytest-profiling = "*"
 moto = "*"
+freezegun = "*"
 
 [requires]
 python_version = "3.7"

@@ -77,6 +77,11 @@ def custom_message_text_is_specified(request):
     return hasattr(request, 'param')
 
 @pytest.fixture
-def message_with_file():
+def message_with_csv():
     document = {'file_name': 'data.csv', 'file_id': '12abf34', 'mime_type': 'text/csv', 'file_size': '28440', 'file_unique_id': '6825fac'}
+    return {'document': document, 'from': {'id': 'dummy_id'}}
+
+@pytest.fixture
+def message_with_pdf():
+    document = {'file_name': 'example.pdf', 'file_id': '12abf34', 'mime_type': 'application/pdf', 'file_size': '28440', 'file_unique_id': '1234bde'}
     return {'document': document, 'from': {'id': 'dummy_id'}}
