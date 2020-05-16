@@ -1,3 +1,4 @@
+from diabetelegram.actions.dexcom_actions import DexcomAction
 from diabetelegram.actions.expense_actions import ExpenseAction, ExpenseAmountAction, ExpenseCategoryAction, ExpenseDescriptionAction
 from diabetelegram.actions.insulin_actions import InsulinBasalAction, InsulinBolusAction, InsulinUnitsAction, InsulinSummaryAction
 
@@ -11,6 +12,7 @@ class Actions:
     Bolus = InsulinBolusAction
     Units = InsulinUnitsAction
     InsulinSummary = InsulinSummaryAction
+    Dexcom = DexcomAction
 
     ALL = [
         Expense,
@@ -20,5 +22,6 @@ class Actions:
         Basal,
         Bolus,
         Units,
-        InsulinSummary
+        InsulinSummary,
+        Dexcom
     ]
