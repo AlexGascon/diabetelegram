@@ -18,6 +18,10 @@ provider:
       Resource:
         - 'Fn::GetAtt': [ StateTable, Arn ]
         - '${env:EXPENSES_TABLE_ARN}'
+    - Effect: 'Allow'
+      Action: 's3:PutObject'
+      Resource:
+        - '${env:ALEXGASCON_API_BUCKET_ARN}/dexcom/cgm-data*'
   environment:
     stage: ${self:custom.stage}
   profile: ${self:custom.profiles.${self:custom.stage}, 'beta'}

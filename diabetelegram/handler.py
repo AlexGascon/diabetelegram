@@ -4,7 +4,6 @@ import os
 import traceback
 
 from diabetelegram.actions.message_router import MessageRouter
-from diabetelegram.commands.command_router import CommandRouter
 from diabetelegram.services.telegram import TelegramWrapper
 
 
@@ -18,13 +17,10 @@ def handler(event, context):
         telegram = TelegramWrapper()
         message = telegram.extract_message(_event_body(event))
 
-        if message['text'].startswith('/'):
-            CommandRouter.dispatch(message)
-        else:
-            MessageRouter.dispatch(message)
-
+        MessageRouter.dispatch(message)
     except Exception as e:
         logger.error(f"ERROR MESSAGE: {e} \n TRACEBACK: {traceback.format_exc()}")
+        telegram.reply(message, str(e))
 
     finally:
         # Making sure to notify Telegram Webhook that we received the update

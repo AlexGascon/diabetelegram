@@ -6,11 +6,10 @@ from diabetelegram.services.telegram import TelegramWrapper
 
 
 class DexcomAction(BaseAction):
+    CSV_MIME_TYPES = ['text/comma-separated-values', 'text/csv']
+    FILENAME_PREFIX = 'cgm-data'
     MESSAGE_UPLOADING_FILE = 'Uploading file...'
     MESSAGE_FILE_UPLOADED = 'File uploaded!'
-
-    FILENAME_PREFIX = 'cgm-data'
-
     S3_BUCKET = 'alexgascon-api-files'
     S3_PATH_PREFIX = 'dexcom'
 
@@ -32,7 +31,7 @@ class DexcomAction(BaseAction):
 
     def is_csv_file(self):
         document = self.message['document']
-        return document['mime_type'] == 'text/csv'
+        return document['mime_type'] in self.CSV_MIME_TYPES
 
     def _filename(self):
         formatted_time = datetime.utcnow().isoformat()

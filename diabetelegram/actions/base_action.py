@@ -17,4 +17,7 @@ class BaseAction(ABC):
 
     @property
     def message_text(self):
+        if 'text' not in self.message:
+            return ''
+
         return self.message['text']
