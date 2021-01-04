@@ -22,3 +22,5 @@ def test_serializes_incomplete_meal(incomplete_meal):
     assert serialized_meal["meal_type"] == "breakfast"
     assert serialized_meal["notes"] == "Desayuno en el bar de la esquina"
     assert serialized_meal["pre_blood_glucose"] == 92
+    assert not "post_blood_glucose" in serialized_meal
+    assert not "carbohydrates_portions" in serialized_meal
