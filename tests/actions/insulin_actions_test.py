@@ -122,6 +122,12 @@ class TestInsulinUnitsAction:
 
         assert not units_action.matches()
 
+    @pytest.mark.parametrize('state, message', [('basal', '-1')], indirect=True)
+    def test_matches_if_the_message_is_a_negative_integer(self, state, message):
+        units_action = self.build_action(message, state)
+
+        assert units_action.matches()
+
     @pytest.mark.parametrize('message', ['22'], indirect=True)
     def test_handle_sets_the_state_to_initial(self, state, message, sns_client):
         units_action = self.build_action(message, state)

@@ -33,7 +33,9 @@ class InsulinBolusAction(BaseAction):
 class InsulinUnitsAction(BaseAction):
     def matches(self):
         state = self.state_manager.get()
-        return (state == 'basal' or state == 'bolus') and self.message_text.isdigit()
+        is_valid_state = (state == 'basal' or state == 'bolus')
+
+        return is_valid_state and self._is_valid_integer()
 
     def handle(self):
         state = self.state_manager.get()
@@ -45,6 +47,14 @@ class InsulinUnitsAction(BaseAction):
         self.state_manager.set('initial')
 
         self.telegram.reply(self.message, result)
+
+    def _is_valid_integer(self):
+        try:
+            int(self.message_text)
+        except ValueError:
+            return False
+
+        return True
 
 
 class InsulinSummaryAction(BaseAction):
