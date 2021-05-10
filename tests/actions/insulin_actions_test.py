@@ -151,8 +151,6 @@ class TestInsulinUnitsAction:
 
         units_action.handle()
 
-        units_action.telegram.reply.assert_called_once()
-
 
 class TestInsulinSummaryAction:
     def build_action(self, message, state_manager):

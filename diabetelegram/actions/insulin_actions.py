@@ -1,3 +1,5 @@
+import logging
+
 from diabetelegram.actions.base_action import BaseAction
 from diabetelegram.models.injection import Injection
 from diabetelegram.services.injection_sns_client import InjectionSNSClient
@@ -5,6 +7,9 @@ from diabetelegram.services.summary_sns_client import SummarySNSClient
 from diabetelegram.services.state_manager import StateManager
 from diabetelegram.services.telegram import TelegramWrapper
 
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 class InsulinBasalAction(BaseAction):
     def matches(self):
@@ -42,11 +47,10 @@ class InsulinUnitsAction(BaseAction):
         units = int(self.message_text)
         injection = Injection(injection_type=state, units=units)
 
-        result = InjectionSNSClient().insulin_injected(injection)
+        message_id = InjectionSNSClient().insulin_injected(injection)
+        logger.info(f"SNS message published. Message ID: {message_id}")
 
         self.state_manager.set('initial')
-
-        self.telegram.reply(self.message, result)
 
     def _is_valid_integer(self):
         try:
