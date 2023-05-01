@@ -12,7 +12,7 @@ class TestPutFileInS3Command:
         self.content = 'This is the content inside of the file'
         self.bucket = 'my-bucket-name'
         self.s3 = s3
-        self.s3.create_bucket(Bucket=self.bucket)
+        self.s3.create_bucket(Bucket=self.bucket, CreateBucketConfiguration={'LocationConstraint': 'eu-west-1'})
 
     def test_it_uploads_the_file_to_s3(self):
         assert self._s3_bucket_is_empty()
