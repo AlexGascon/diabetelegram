@@ -14,7 +14,7 @@ pytest_plugins = [
 
 @pytest.fixture(scope="function", autouse=True)
 def mock_dynamodb(aws_credentials):
-    with moto.mock_dynamodb2() as dynamodb:
+    with moto.mock_dynamodb() as dynamodb:
         Expense.create_table()
         yield
 

@@ -7,7 +7,11 @@ STATE = {
     'KeySchema': [{
         'AttributeName': 'user_id',
         'KeyType': 'HASH'
-    }]
+    }],
+    'ProvisionedThroughput': {
+        'ReadCapacityUnits': 1,
+        'WriteCapacityUnits': 1
+    }
 }
 
 TABLES = [
