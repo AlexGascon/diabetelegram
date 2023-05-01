@@ -19,7 +19,7 @@ def aws_credentials():
 @pytest.fixture(scope='function')
 def functional_dynamodb(aws_credentials):
     """Mocked DynamoDB client"""
-    with moto.mock_dynamodb2():
+    with moto.mock_dynamodb():
         dynamodb = boto3.client('dynamodb')
         create_tables(dynamodb)
         yield dynamodb
