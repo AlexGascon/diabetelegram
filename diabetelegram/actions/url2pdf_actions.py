@@ -1,8 +1,9 @@
 import logging
 import os
 import re
-import requests
 from urllib.parse import urlparse, urlunparse
+
+from diabetelegram.actions.base_action import BaseAction
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
