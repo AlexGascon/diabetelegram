@@ -14,10 +14,7 @@ class Url2PdfAction(BaseAction):
     URL_REGEX = r"^(https?://).*"
 
     def matches(self):
-        logger.info("HEY I'M HERE")
-        result = bool(re.match(self.URL_REGEX, self.message_text.lower()))
-        logger.info(f"HEY THIS IS THE RESULT: {result}")
-        return result
+        return bool(re.match(self.URL_REGEX, self.message_text.lower()))
 
     def handle(self):
         url2pdf_endpoint = os.environ['URL2PDF_ENDPOINT']
