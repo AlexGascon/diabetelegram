@@ -1,8 +1,9 @@
 import logging
 import os
 import re
-import requests
 from urllib.parse import urlparse, urlunparse
+
+from diabetelegram.actions.base_action import BaseAction
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -13,7 +14,10 @@ class Url2PdfAction(BaseAction):
     URL_REGEX = r"^(https?://).*"
 
     def matches(self):
-        return bool(re.match(self.URL_REGEX, self.message_text.lower()))
+        logger.info("HEY I'M HERE")
+        result = bool(re.match(self.URL_REGEX, self.message_text.lower()))
+        logger.info(f"HEY THIS IS THE RESULT: {result}")
+        return result
 
     def handle(self):
         url2pdf_endpoint = os.environ['URL2PDF_ENDPOINT']
